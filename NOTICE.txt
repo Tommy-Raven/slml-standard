@@ -1,0 +1,76 @@
+––––––––––––––––––––––––––––––––––––––––––––––
+
+NOTICE
+
+Structural Legitimacy Manifest Language (SLML)
+Copyright © 2026 Tommy Raven
+
+This repository contains:
+
+1) Normative specification text for the Structural Legitimacy Manifest
+   Language (SLML) and associated governance modules.
+   These materials are licensed under the Creative Commons Attribution
+   4.0 International License (CC-BY 4.0).
+
+2) Schemas, reference validators, tooling, and auxiliary artifacts.
+   These materials are licensed under the Apache License, Version 2.0.
+
+See LICENSE-SPEC.txt and LICENSE-CODE.txt for full license texts.
+
+---
+
+ATTRIBUTION AND USE
+
+Attribution under CC-BY 4.0 permits reuse, redistribution, and adaptation
+of the specification text, provided appropriate credit is given.
+
+Attribution does NOT constitute:
+- certification,
+- endorsement,
+- validation,
+- or compliance approval.
+
+Statements such as “SLML-compliant”, “SLML-certified”, or “validated
+against SLML” are statements of fact, not license grants.
+
+---
+
+COMPLIANCE AND TRACEABILITY
+
+A system or artifact may accurately claim SLML compliance only if it can
+produce, upon request:
+
+- a complete SLML manifest,
+- a reproducible validation result,
+- a cryptographic hash or traceable reference to the exact SLML version
+  used for evaluation.
+
+Use of the SLML text or tooling without these elements is permitted;
+claiming compliance without them is not an accurate representation.
+
+This repository does not provide certification services and does not
+authorize third parties to issue compliance endorsements.
+
+---
+
+NO ENDORSEMENT
+
+Use of the name “Structural Legitimacy Manifest Language”, “SLML”, or
+associated terminology does not imply endorsement by the author or
+contributors.
+
+Trademarks, service marks, and names are not licensed except as required
+for attribution and descriptive reference.
+
+---
+
+DISCLAIMER
+
+The materials in this repository are provided “AS IS”, without warranty
+of any kind, express or implied. Use is at your own risk.
+
+---
+
+This NOTICE is informational and does not modify the terms of any license.
+
+––––––––––––––––––––––––––––––––––––––––––––––
