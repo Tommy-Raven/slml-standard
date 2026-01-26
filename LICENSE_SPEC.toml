@@ -1,0 +1,65 @@
+[license]
+name = "Creative Commons Attribution 4.0 International"
+identifier = "CC-BY-4.0"
+modifiable = false
+
+[license.scope]
+applies_to = [
+  "normative_specification_text",
+  "normative_examples",
+  "governance_modules"
+]
+
+[license.grant]
+worldwide = true
+royalty_free = true
+non_sublicensable = true
+non_exclusive = true
+irrevocable = true
+
+[license.rights]
+copyright = true
+similar_rights = true
+sui_generis_database_rights = true
+
+[license.conditions]
+attribution_required = true
+modification_disclosure_required = true
+license_reference_required = true
+
+[license.exclusions]
+moral_rights_licensed = false
+patent_rights_licensed = false
+trademark_rights_licensed = false
+
+[license.disclaimer]
+warranty_provided = false
+liability_limited = true
+
+[license.term]
+duration = "copyright_term"
+
+[license.interpretation]
+endorsement_permitted = false
+certification_permitted = false
+compliance_claim_permitted = false
+
+[license.reference]
+canonical_url = "https://creativecommons.org/licenses/by/4.0/" 
+
+---
+
+Section 7 – Other Terms and Conditions
+
+The Licensor shall not be bound by any additional or different terms unless
+expressly agreed.
+
+---
+
+Section 8 – Interpretation
+
+Nothing in this Public License constitutes or may be interpreted as
+permission to assert or imply endorsement, certification, or compliance
+with any standard.
+
+Creative Commons is not a party to this Public License.
