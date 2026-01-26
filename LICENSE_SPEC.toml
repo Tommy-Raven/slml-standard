@@ -45,21 +45,4 @@ certification_permitted = false
 compliance_claim_permitted = false
 
 [license.reference]
-canonical_url = "https://creativecommons.org/licenses/by/4.0/" 
-
----
-
-Section 7 – Other Terms and Conditions
-
-The Licensor shall not be bound by any additional or different terms unless
-expressly agreed.
-
----
-
-Section 8 – Interpretation
-
-Nothing in this Public License constitutes or may be interpreted as
-permission to assert or imply endorsement, certification, or compliance
-with any standard.
-
-Creative Commons is not a party to this Public License.
+canonical_url = "https://creativecommons.org/licenses/by/4.0/"
