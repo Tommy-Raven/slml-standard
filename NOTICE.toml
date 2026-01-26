@@ -1,0 +1,58 @@
+[notice]
+title = "NOTICE"
+copyright_holder = "Tommy Raven"
+copyright_year = 2026
+project_name = "Structural Legitimacy Manifest Language"
+project_short_name = "SLML"
+
+[notice.licenses]
+specification = "CC-BY-4.0"
+code_and_tooling = "Apache-2.0"
+
+[notice.license_references]
+specification_license_file = "LICENSE-SPEC.txt"
+code_license_file = "LICENSE-CODE.txt"
+
+[notice.attribution]
+permitted = true
+license = "CC-BY-4.0"
+requirements = [
+  "appropriate_credit"
+]
+attribution_does_not_constitute = [
+  "certification",
+  "endorsement",
+  "validation",
+  "compliance_approval"
+]
+compliance_statements_are_license_grants = false
+compliance_statements_are_factual_claims = true
+
+[notice.compliance_and_traceability]
+certification_services_provided = false
+third_party_certification_authorized = false
+required_for_accurate_compliance_claim = [
+  "complete_slml_manifest",
+  "reproducible_validation_result",
+  "cryptographic_hash_or_traceable_standard_reference"
+]
+use_without_compliance_claim_permitted = true
+compliance_claim_without_traceability_is_accurate = false
+
+[notice.endorsement]
+use_of_name_implies_endorsement = false
+use_of_acronym_implies_endorsement = false
+names_and_marks_licensed = false
+names_and_marks_permitted_for = [
+  "attribution",
+  "descriptive_reference"
+]
+
+[notice.disclaimer]
+warranty_provided = false
+warranty_scope = "any"
+use_at_own_risk = true
+
+[notice.meta]
+informational_only = true
+modifies_license_terms = false
