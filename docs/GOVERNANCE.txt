@@ -1,0 +1,108 @@
+REPOSITORY GOVERNANCE
+
+This document explains how governance works in the SLML standard repository.
+
+It exists to make the rules clear to humans.
+The authoritative governance rules are encoded in GOVERNANCE.toml.
+
+If there is any conflict between this document and GOVERNANCE.toml,
+the TOML file is authoritative.
+
+------------------------------------------------------------
+
+1) IMMUTABILITY RULE
+
+Once a standard version is released and tagged, its contents are immutable.
+
+The directory for a released version, such as:
+
+  standards/v0.1/
+
+must not be modified after release.
+
+Any change to released artifacts, regardless of intent,
+constitutes a new version and must occur in a new directory,
+for example:
+
+  standards/v0.2/
+
+------------------------------------------------------------
+
+2) AUTHORITY BOUNDARY
+
+Normative authority lives only in:
+
+  standards/<version>/
+
+No maintainer, issue discussion, pull request conversation,
+or external statement has interpretive authority over released artifacts.
+
+Documentation outside the standards directory is informative only
+and does not define rules.
+
+------------------------------------------------------------
+
+3) VERSION CREATION REQUIREMENTS
+
+A new version directory must include, at minimum:
+
+- an immutability notice
+- a normative specification file
+- a self-manifest that proves the version’s rules recursively
+- any additional normative modules introduced by that version
+
+A version is not eligible for release until its self-manifest
+validates under its own rules.
+
+------------------------------------------------------------
+
+4) CONTRIBUTIONS POLICY
+
+Allowed contributions include:
+
+- adding new standard versions in new directories
+- adding non-normative tooling
+- adding non-normative documentation
+- adding validator implementations that conform to an existing version
+
+Not allowed:
+
+- changing artifacts of a released version
+- introducing clarifications that alter semantics without a new version
+- adding defaults or inference behavior to reference validator outputs
+
+------------------------------------------------------------
+
+5) DISPUTE RESOLUTION
+
+Disputes about meaning are resolved by:
+
+1) the normative text in standards/<version>/
+2) the validation behavior implied by that text
+
+If ambiguity exists, the ambiguity is considered a defect.
+It may only be corrected by issuing a new version.
+
+------------------------------------------------------------
+
+6) RELEASE PROCESS (RECOMMENDED MINIMUM)
+
+For a release vX.Y:
+
+1. Ensure standards/vX.Y/ is complete.
+2. Generate cryptographic hashes using:
+   python tools/hash_release.py standards/vX.Y > standards/vX.Y/HASHES.sha256
+3. Commit the hash file.
+4. Create a git tag:
+   git tag -a slml-vX.Y -m "SLML vX.Y immutable release"
+5. Push the tag and create a GitHub Release with the frozen artifacts.
+
+------------------------------------------------------------
+
+7) MAINTAINER CONSTRAINT
+
+Maintainers may manage repository operations,
+but they do not possess authority to modify released semantics.
+
+Authority resides in immutable artifacts
+and in versioned evolution only.
