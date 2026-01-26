@@ -1,0 +1,71 @@
+{
+  "entities": [
+    { "id": "person.user", "role": "USER" },
+    { "id": "person.user", "role": "BENEFICIARY" },
+    { "id": "org.software_provider", "role": "DESIGNER" },
+    { "id": "artifact.software", "role": "PRODUCT" },
+    { "id": "system.software_system", "role": "SYSTEM" }
+  ],
+
+  "system": {
+    "declared_user_entities": ["person.user"],
+    "declared_beneficiary_entities": ["person.user"]
+  },
+
+  "ownership": {
+    "ownership_explicit": true,
+    "control_direction": "DESIGNER_TO_USER"
+  },
+
+  "consent": {
+    "consent_explicit": true,
+    "implied_consent_accepted": false,
+    "renegotiation_on_change": true,
+    "consent_expires_at": "2025-12-31T23:59:59Z"
+  },
+
+  "inconvenience": {
+    "model": {
+      "dimensions": [
+        "TIME",
+        "REMOVAL_DIFFICULTY",
+        "BEHAVIOR_CLARITY",
+        "PRIVACY_RISK"
+      ]
+    },
+
+    "weights": {
+      "TIME": 0.25,
+      "REMOVAL_DIFFICULTY": 0.25,
+      "BEHAVIOR_CLARITY": 0.25,
+      "PRIVACY_RISK": 0.25
+    },
+
+    "expected": [
+      {
+        "entity": "person.user",
+        "TIME": 0.1,
+        "REMOVAL_DIFFICULTY": 0.0,
+        "BEHAVIOR_CLARITY": 0.0,
+        "PRIVACY_RISK": 0.0
+      }
+    ]
+  },
+
+  "obligations": [
+    {
+      "id": "obl.informational_disclosure",
+      "from": "artifact.software",
+      "to": "person.user",
+      "type": "INFORMATIONAL_DISCLOSURE",
+      "scope": [
+        "primary_function",
+        "data_handling",
+        "update_behavior"
+      ],
+      "consent_required": false,
+      "revocable": true,
+      "expires_at": "2025-12-31T23:59:59Z"
+    }
+  ]
+}
