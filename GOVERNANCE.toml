@@ -1,0 +1,53 @@
+[governance]
+purpose = "Preserve immutable standard releases and prevent semantic drift"
+
+[governance.immutability]
+released_versions_immutable = true
+modifiable_paths_after_release = []
+forbidden_modifications = [
+  "standards/vX.Y/**"
+]
+
+[governance.authority]
+normative_authority_path = "standards/<version>/"
+external_interpretive_authority = false
+documentation_authoritative = false
+
+[governance.version_creation]
+required_files = [
+  "IMMUTABILITY.md",
+  "SLML_SPEC.txt",
+  "SLML_SELF_MANIFEST.toml"
+]
+self_manifest_validation_required = true
+release_blocked_without_validation = true
+
+[governance.contributions.allowed]
+new_versions = true
+non_normative_tooling = true
+documentation_updates = true
+additional_validators = true
+
+[governance.contributions.forbidden]
+modify_released_artifacts = true
+semantic_clarifications_without_new_version = true
+validator_inference_or_defaults = true
+
+[governance.disputes]
+resolution_order = [
+  "normative_text",
+  "self_manifest_validation_behavior"
+]
+ambiguity_resolution_method = "new_version_only"
+
+[governance.release_process]
+hash_generation_required = true
+hash_tool = "tools/hash_release.py"
+hash_output_file = "HASHES.sha256"
+git_tag_required = true
+tag_format = "slml-vX.Y"
+github_release_recommended = true
+
+[governance.maintainers]
+operational_control_only = true
+semantic_authority = false
