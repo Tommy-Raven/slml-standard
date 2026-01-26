@@ -1,0 +1,111 @@
+EXECUTIVE COMPLIANCE SUMMARY
+Structural Legitimacy Manifest Language (SLML)
+
+Audience: Executives, Procurement Officers, Risk & Compliance Leaders
+
+---
+
+WHAT SLML IS
+
+SLML is a design-time structural admissibility standard.
+It determines whether a system may legitimately claim to serve its users.
+
+SLML evaluates:
+- ownership direction
+- consent validity
+- obligation flow
+- inconvenience distribution
+
+SLML does not evaluate intent, quality, or legality.
+
+---
+
+WHAT SLML IS NOT
+
+SLML is not:
+- an ethics framework
+- a certification program
+- a scoring system
+- a regulatory replacement
+
+SLML produces binary outcomes only:
+ADMISSIBLE or CORRUPTED.
+
+---
+
+WHY INSTITUTIONS USE SLML
+
+Institutions adopt SLML to prevent systems from being approved,
+procured, or deployed while structurally misrepresenting who they serve.
+
+SLML detects failures that:
+- pass legal review
+- pass ethical review
+- pass user-satisfaction metrics
+- pass factual accuracy checks
+
+---
+
+HOW COMPLIANCE WORKS
+
+A system is SLML-compliant if and only if:
+
+1) It has a complete SLML manifest
+2) The manifest references a specific SLML version
+3) Validation produces an ADMISSIBLE result
+4) The version is immutable and traceable
+
+Compliance claims without these elements are not auditable.
+
+---
+
+WHAT SLML COMPLIANCE MEANS
+
+SLML compliance means:
+
+- Users are the beneficiaries
+- Consent is explicit and renegotiable
+- Obligations do not flow upstream
+- Burdens are not asymmetrically offloaded
+
+It does not imply quality, safety, or endorsement.
+
+---
+
+HOW SLML IS USED IN PRACTICE
+
+Common institutional integration points:
+
+- procurement gates
+- pre-deployment reviews
+- system architecture approvals
+- AI governance checkpoints
+
+SLML is applied before deployment, not after harm.
+
+---
+
+RISK REDUCTION VALUE
+
+SLML reduces:
+- reputational risk
+- compliance ambiguity
+- post-hoc remediation costs
+- governance disputes over intent
+
+By making structural corruption visible early.
+
+---
+
+SUMMARY
+
+SLML is an admissibility filter.
+It prevents systems from claiming legitimacy they cannot structurally
+support.
+
+It is intentionally narrow.
+That is why it works.
+
+---
+
+End of Summary.
