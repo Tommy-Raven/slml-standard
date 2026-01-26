@@ -1,5 +1,3 @@
-––––––––––––––––––––––––––––––––––––––––––––––
-
 NOTICE
 
 Structural Legitimacy Manifest Language (SLML)
@@ -72,5 +70,4 @@ of any kind, express or implied. Use is at your own risk.
 ---
 
 This NOTICE is informational and does not modify the terms of any license.
-
-––––––––––––––––––––––––––––––––––––––––––––––
+```0
