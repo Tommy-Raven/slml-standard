@@ -1,0 +1,33 @@
+[license]
+name = "Apache License"
+version = "2.0"
+identifier = "Apache-2.0"
+
+[license.scope]
+applies_to = [
+  "schemas",
+  "validators",
+  "tooling"
+]
+
+[license.grants]
+copyright = true
+patent = true
+
+[license.conditions]
+attribution_required = true
+license_notice_required = true
+modification_notice_required = true
+notice_file_required = true
+
+[license.trademarks]
+trademark_use_granted = false
+descriptive_use_permitted = true
+
+[license.disclaimer]
+warranty_provided = false
+liability_limited = true
+
+[license.reference]
+canonical_url = "http://www.apache.org/licenses/"
+legal_code_version = "January 2004"
