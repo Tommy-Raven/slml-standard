@@ -15,11 +15,11 @@ system = "A complete pipeline that routes obligation, control, action, output, a
 beneficiary= "Any entity for whom inconvenience is minimized by system design, whether explicit or implicit"
 
 [terms.invariant.axioms]
-directional ownership = "Ownership and control are strictly uni-directional, i.e., |Designers}>|Beneficiaries}>|Users}>|Components}>|Product|— Obligation flows downstream only. Any upstream obligation constitutes a violation."
-explicit consent required = "Consent cannot be inferred from: Use, Participation, Dependency, Continued presence, etc. Implied contracts are null with respect to obligation."
-role invariance = "Neither Products, Components, Systems, nor Designers SHALL not reframe Users as Components|Components as Beneficiaries|Systems as Products|Designers as neutral actors| Any such redefinition constitutes role-fraud"
-beneficiary invariance = "All systems have beneficiaries that are Implied at inception; Revealed through inconvenience-flow audit. Beneficiaries are identified by inconvenience and cost displacement, not by stated intent"
-Systems corruption, Engineered = "selectively invisible. It is the embodiment of intentional architectural invisibilization of obligations and inconveniences such that Components or Users are misappropriated for Beneficiary convenience while the System presents itself as neutral or User-serving"
-role-flow invariance = "A non-corrupted system must satisfy the following. a) User == Beneficiary, b) Product is consumed by User, c) Components are obligated to User/Product, d) System routes control toward User
+directional_ownership = "Ownership and control are strictly uni-directional, i.e., |Designers}>|Beneficiaries}>|Users}>|Components}>|Product|— Obligation flows downstream only. Any upstream obligation constitutes a violation."
+explicit_consent_required = "Consent cannot be inferred from: Use, Participation, Dependency, Continued presence, etc. Implied contracts are null with respect to obligation."
+role_invariance = "Neither Products, Components, Systems, nor Designers SHALL not reframe Users as Components|Components as Beneficiaries|Systems as Products|Designers as neutral actors| Any such redefinition constitutes role-fraud"
+beneficiary_invariance = "All systems have beneficiaries that are Implied at inception; Revealed through inconvenience-flow audit. Beneficiaries are identified by inconvenience and cost displacement, not by stated intent"
+Systems_corruption = "selectively invisible. It is the embodiment of intentional architectural invisibilization of obligations and inconveniences such that Components or Users are misappropriated for Beneficiary convenience while the System presents itself as neutral or User-serving"
+role_flow_invariance = "A non-corrupted system must satisfy the following. a) User == Beneficiary, b) Product is consumed by User, c) Components are obligated to User/Product, d) System routes control toward User
 d) Inconvenience flows away from User—Any deviation is non-recoverable without structural redesign."
 
