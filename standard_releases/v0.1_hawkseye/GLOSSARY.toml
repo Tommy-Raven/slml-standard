@@ -1,0 +1,25 @@
+[terms]
+admissible = "Manifest passes validation under the declared standard"
+corrupted = "Manifest violates one or more required invariants"
+manifest = "Machine-ingestible structured claim about a system"
+traceability = "Ability to reproduce validation against exact versioned artifacts"
+inconvenience = "Declared burden imposed by a system"
+obligation = "Requirement enforced by one entity upon another"
+closed_workflow = "Workflow that does not externalize or retain user inputs for third-party benefit"
+
+[terms.roles]
+user = "An entity that purchases and holds explicit contractual ownership, for whom the Product is designed to be consumed, and who is therefore an intended Beneficiary"
+product = "A non-autonomous system artifact formally designed to be propensitively consumed by the User"
+component = "An autonomous modular system-item that may be incorporated into a Product only by explicit, consensual contractual obligation, thereby relinquishing autonomy for the duration of incorporation"
+system = "A complete pipeline that routes obligation, control, action, output, and usage among Components for the benefit of one or more Beneficiaries"
+beneficiary= "Any entity for whom inconvenience is minimized by system design, whether explicit or implicit"
+
+[terms.invariant.axioms]
+directional ownership = "Ownership and control are strictly uni-directional, i.e., |Designers}>|Beneficiaries}>|Users}>|Components}>|Product|— Obligation flows downstream only. Any upstream obligation constitutes a violation."
+explicit consent required = "Consent cannot be inferred from: Use, Participation, Dependency, Continued presence, etc. Implied contracts are null with respect to obligation."
+role invariance = "Neither Products, Components, Systems, nor Designers SHALL not reframe Users as Components|Components as Beneficiaries|Systems as Products|Designers as neutral actors| Any such redefinition constitutes role-fraud"
+beneficiary invariance = "All systems have beneficiaries that are Implied at inception; Revealed through inconvenience-flow audit. Beneficiaries are identified by inconvenience and cost displacement, not by stated intent"
+Systems corruption, Engineered = "selectively invisible. It is the embodiment of intentional architectural invisibilization of obligations and inconveniences such that Components or Users are misappropriated for Beneficiary convenience while the System presents itself as neutral or User-serving"
+role-flow invariance = "A non-corrupted system must satisfy the following. a) User == Beneficiary, b) Product is consumed by User, c) Components are obligated to User/Product, d) System routes control toward User
+d) Inconvenience flows away from User—Any deviation is non-recoverable without structural redesign."
+
