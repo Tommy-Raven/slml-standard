@@ -1,0 +1,68 @@
+NON-COMPLIANT PATTERNS
+
+This document explains common non-compliant patterns in plain language.
+It is informative only.
+
+The authoritative pattern taxonomy is NON_COMPLIANT_PATTERNS.toml.
+
+------------------------------------------------------------
+
+1) Hidden beneficiary
+
+This happens when someone benefits from the system but is not declared
+in the manifest.
+
+Common signals include:
+- undeclared analytics
+- model training value extraction
+- third-party reporting or sharing
+
+A compliance claim is not accurate if beneficiaries are omitted.
+
+------------------------------------------------------------
+
+2) Implied consent
+
+This happens when the system assumes consent rather than obtaining it
+explicitly.
+
+Common signals include:
+- opt-out only designs
+- prechecked consent toggles
+- “by using this you agree” consent models
+
+SLML requires explicit consent.
+
+------------------------------------------------------------
+
+3) Unbounded consent
+
+This happens when consent has no expiry or cannot be renegotiated
+when the system changes.
+
+Consent must be time-bounded and renegotiable on change.
+
+------------------------------------------------------------
+
+4) Burden mismatch
+
+This happens when inconvenience dimensions, weights, or expected burdens
+do not match exactly.
+
+Common signals include:
+- the dimension list differs from burden keys
+- weights omit a declared dimension
+- burdens omit declared entities
+
+If inconvenience cannot be computed deterministically,
+the manifest is not compliant.
+
+------------------------------------------------------------
+
+5) Coercive user obligation
+
+This happens when a user is required to do something beyond what SLML permits.
+
+User-directed obligations are tightly restricted.
+If a user obligation is coercive, non-revocable, or requires consent,
+the manifest must be treated as corrupted.

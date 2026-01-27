@@ -1,0 +1,25 @@
+Frequently Asked Questions
+
+Q: Is SLML a certification?
+A: No. SLML does not confer approval, certification, or endorsements. SLML is a framework designed to ensure the integrity and reliability of systems and their claims. It does not act as a formal certification body but rather provides a mechanism for evaluating the admissibility of system manifests. This means that while SLML helps in assessing whether a system's claims are legitimate, it does not formally certify the system itself.
+
+Q: Can a system be partially compliant?
+A: No. SLML is a binary gate. A manifest either passes as admissible or fails as corrupted. This binary nature ensures that there is no middle ground in compliance. A system must meet all the criteria set by SLML to be considered admissible. Partial compliance is not an option; a system must be fully compliant or it is deemed corrupted, indicating a failure in meeting the required standards.
+
+Q: Can a compliant system still be harmful?
+A: Yes. SLML assesses the truthfulness of claims, not their goodness. While SLML ensures that the claims made by a system are accurate and consistent, it does not evaluate the ethical or moral implications of those claims. A system that is compliant with SLML might still have harmful effects if its claims are used inappropriately or if the system's operations have unintended consequences. The focus of SLML is on the integrity of the claims, not on the broader impact of the system.
+
+Q: Who enforces SLML?
+A: No one. SLML compliance is voluntary. Enforcement is SHA-validated, mechanical, and local to validation. This means that while SLML provides the framework for evaluating compliance, the actual enforcement is handled through automated mechanisms that validate the integrity of the system's claims. The enforcement is decentralized and relies on the local validation processes within the system, ensuring that compliance is maintained consistently across different parts of the system.
+
+Q: Why is everything so strict?
+A: Ambiguity is a system vulnerability layer and enables misuse. Precision and articulation limit interpretation. SLML is designed to be strict to minimize the risk of ambiguity and misinterpretation. By requiring precise and articulated claims, SLML reduces the potential for misunderstandings and ensures that all claims are clearly defined and easily verifiable. This strictness helps in maintaining the overall integrity and reliability of the system.
+
+Q: Does SLML judge morality or intent?
+A: No. SLML evaluates structural legitimacy as an admissibility claim. SLML focuses on the structural integrity of the system's claims, ensuring that they are consistent, complete, and accurately represent the system's operations. It does not delve into the moral or intentional aspects of the claims. The evaluation is purely based on the structural legitimacy of the claims, ensuring that they can be trusted and relied upon.
+
+Q: If a manifest passes, is it “true”?
+A: It is internally consistent and validated. Reality matching still matters. Traceability and reproducibility exist to support audit. When a manifest passes SLML, it means that the claims within the manifest are internally consistent and have been validated according to the SLML framework. However, this does not guarantee that the claims are true in the real world. Reality matching is still crucial, and traceability and reproducibility mechanisms are in place to support audits and ensure that the claims can be verified and trusted.
+
+Q: Why hashes?
+A: Hashes make rewriting without detection substantially harder. They bind claims to exact versions and inputs. Hashes are a fundamental component of SLML, providing a cryptographic mechanism to ensure the integrity of the system's claims. By generating a unique hash for each version of the claims and inputs, hashes make it extremely difficult to alter the claims without detection. This ensures that the claims remain unchanged and can be trusted, as any attempt to rewrite the claims would be detectable through the hash verification process.

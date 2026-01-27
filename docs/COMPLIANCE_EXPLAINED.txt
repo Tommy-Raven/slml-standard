@@ -1,0 +1,67 @@
+COMPLIANCE EXPLAINED
+
+This document explains what an SLML compliance claim means.
+It is informative only.
+
+Authoritative requirements live in SPEC.toml and ERROR_CODES.toml.
+If there is any conflict, those TOML files are authoritative.
+
+------------------------------------------------------------
+
+What “compliance” means
+
+An SLML compliance claim is a statement of fact.
+
+It means:
+
+- a complete SLML manifest exists,
+- the manifest validates under the canonical validator,
+- the manifest is bound to the exact standard version used,
+- and the validation result is reproducible.
+
+It does not mean:
+
+- certification,
+- endorsement,
+- moral approval,
+- or legal compliance.
+
+------------------------------------------------------------
+
+Why reproducibility matters
+
+A claim that cannot be reproduced cannot be trusted.
+
+If a compliance claim is made, the claimant should be able to provide:
+
+- the manifest,
+- the validator output,
+- and the cryptographic references to the exact standard version.
+
+------------------------------------------------------------
+
+What happens if a system changes
+
+If system behavior changes, the manifest may become false.
+If the manifest becomes false, compliance ends.
+
+Compliance is not permanent.
+It is continuously falsifiable.
+
+------------------------------------------------------------
+
+How error codes work
+
+If validation fails, the validator returns an error code.
+
+Error codes are precise.
+They indicate which invariant was violated.
+
+Fixing wording without fixing reality is not remediation.
+
+User and beneficiary alignment (v0.1)
+
+In SLML v0.1, declared users and declared beneficiaries must match exactly.
+
+A system cannot claim compliance if any third party benefits,
+even if that party is disclosed, because v0.1 forbids extra beneficiaries.
