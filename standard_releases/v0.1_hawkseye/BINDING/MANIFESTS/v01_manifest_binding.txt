@@ -1,0 +1,100 @@
+v01_manifest_binding.txt
+
+STATUS: NORMATIVE
+APPLIES TO: SLML v0.1 (hawkseye)
+
+PURPOSE
+
+This document binds a concrete SLML manifest to its associated claim set, evidence registry, and specification version.
+
+This binding establishes traceability. It does not assert correctness, approval, or real-world behavior.
+
+A manifest without an accompanying binding is unbound and non-auditable under SLML.
+
+
+---
+
+BOUND MANIFEST
+
+manifest_id: v01_binded_manifest.json
+manifest_location: BINDING/MANIFEST/
+spec_name: SLML
+spec_version: 0.1
+spec_codename: hawkseye
+
+The bound manifest is the sole subject of evaluation. All claims, evidence, and validation outcomes refer exclusively to this file.
+
+
+---
+
+BOUND CLAIM SET
+
+claims_id: v01_binded_claims.txt
+claims_location: BINDING/CLAIMS/
+
+The claim set enumerates all explicit assertions made by the manifest. No implicit claims are permitted. Any system property not declared as a claim is outside evaluation scope.
+
+
+---
+
+BOUND EVIDENCE REGISTRY
+
+evidence_id: v01_docs_json.RAW
+evidence_location: BINDING/EVIDENCE/
+
+The evidence registry defines admissible evidence classes and provides verifiable references supporting the evaluability and auditability of the bound claims.
+
+Evidence demonstrates that claims are:
+
+concretely stated
+
+externally referential
+
+reproducible for evaluation
+
+
+Evidence does not prove system behavior. Evidence proves that claims are grounded in documented, inspectable facts.
+
+
+---
+
+VALIDATION CONTEXT
+
+validator_authority: standard_releases/v0.1_hawkseye/
+validator_scope: manifest_only
+evaluation_mode: deterministic
+failure_mode: fail_fast
+
+Validation results apply only to the bound manifest and its declared claims.
+
+
+---
+
+IMMUTABILITY
+
+All bound artifacts are version-frozen. Any change to the manifest, claims, or evidence requires a new binding document and a new version identifier.
+
+
+---
+
+NON-GOALS
+
+This binding does not:
+
+modify the manifest
+
+interpret claims
+
+infer missing information
+
+guarantee validator outcomes
+
+assert ethical, legal, or functional quality
+
+
+
+---
+
+END OF FILE
+
+  
