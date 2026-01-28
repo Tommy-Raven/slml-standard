@@ -1,22 +1,20 @@
-repo_root/CONTRIBUTORS/validators/example_validator_py.RAW
+class ExampleValidator:
+    def __init__(self, spec_version):
+        self.spec_version = spec_version
 
-class ExampleValidator: def init(self, spec_version): self.spec_version = spec_version
+    def validate(self, manifest):
+        if not isinstance(manifest, dict):
+            return {
+                "status": "CORRUPTED",
+                "reason_code": "PARSE_FAILURE"
+            }
 
-def validate(self, manifest):
-    if not isinstance(manifest, dict):
+        if "entities" not in manifest:
+            return {
+                "status": "CORRUPTED",
+                "reason_code": "MISSING_ENTITIES"
+            }
+
         return {
-            "status": "CORRUPTED",
-            "reason_code": "PARSE_FAILURE"
+            "status": "ADMISSIBLE"
         }
-
-    if "entities" not in manifest:
-        return {
-            "status": "CORRUPTED",
-            "reason_code": "MISSING_ENTITIES"
-        }
-
-    return {
-        "status": "ADMISSIBLE"
-    }
-
-
