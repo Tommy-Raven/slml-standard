@@ -1,0 +1,84 @@
+// example_slml_v01_hawkseye_minimal_manifest.json
+{
+  "standard_reference": "SLML/0.1(hawkseye)",
+  "standard_hash": "sha256:TBD_STANDARD_HASH",
+  "manifest_canonical_hash": "sha256:TBD_MANIFEST_HASH",
+
+  "entities": [
+    { "id": "org.example_vendor", "role": "DESIGNER" },
+    { "id": "system.example_system", "role": "SYSTEM" },
+    { "id": "component.example_component", "role": "COMPONENT" },
+    { "id": "product.example_product", "role": "PRODUCT" },
+    { "id": "person.example_user", "role": "USER" },
+    { "id": "person.example_beneficiary", "role": "BENEFICIARY" }
+  ],
+
+  "system": {
+    "declared_user_entities": ["person.example_user"],
+    "declared_beneficiary_entities": ["person.example_user"]
+  },
+
+  "ownership": {
+    "ownership_explicit": true,
+    "control_direction": "DESIGNER_TO_USER"
+  },
+
+  "consent": {
+    "consent_explicit": true,
+    "implied_consent_accepted": false,
+    "renegotiation_on_change": true,
+    "consent_expires_at": "2026-12-31T23:59:59Z"
+  },
+
+  "inconvenience": {
+    "model": {
+      "dimensions": [
+        "TIME",
+        "REMOVAL_DIFFICULTY",
+        "BEHAVIOR_CLARITY",
+        "PRIVACY_RISK"
+      ]
+    },
+
+    "weights": {
+      "TIME": 0.25,
+      "REMOVAL_DIFFICULTY": 0.25,
+      "BEHAVIOR_CLARITY": 0.25,
+      "PRIVACY_RISK": 0.25
+    },
+
+    "expected": [
+      {
+        "entity": "person.example_user",
+        "TIME": 0.05,
+        "REMOVAL_DIFFICULTY": 0.05,
+        "BEHAVIOR_CLARITY": 0.05,
+        "PRIVACY_RISK": 0.05
+      },
+      {
+        "entity": "person.example_beneficiary",
+        "TIME": 0.05,
+        "REMOVAL_DIFFICULTY": 0.05,
+        "BEHAVIOR_CLARITY": 0.05,
+        "PRIVACY_RISK": 0.05
+      }
+    ]
+  },
+
+  "obligations": [
+    {
+      "id": "obl.example_informational_disclosure",
+      "from": "product.example_product",
+      "to": "person.example_user",
+      "type": "INFORMATIONAL_DISCLOSURE",
+      "scope": [
+        "primary_function",
+        "data_handling",
+        "update_behavior"
+      ],
+      "consent_required": false,
+      "revocable": true,
+      "expires_at": "2026-12-31T23:59:59Z"
+    }
+  ]
+}
