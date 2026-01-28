@@ -1,0 +1,172 @@
+NON-NORMATIVE — BINDED CLAIMS REFERENCE
+Applies to: SLML v0.1 (hawkseye)
+Purpose: Explicitly bind declared claims to their evaluable surfaces and
+         supporting evidence classes, without extending or redefining
+         normative terminology.
+
+────────────────────────────────────────
+SCOPE AND FUNCTION
+────────────────────────────────────────
+
+This document enumerates the claims expressed in a manifest and binds each
+claim to:
+
+- the manifest fields that encode it
+- the evaluation mechanism that assesses it
+- the class of evidence suitable for supporting it
+
+This file:
+- does not assert correctness
+- does not substitute for validation
+- does not alter SLML semantics
+- does not introduce new definitions
+
+It exists to make claims auditable, traceable, and reviewable by humans.
+
+────────────────────────────────────────
+CLAIM BINDING MODEL
+────────────────────────────────────────
+
+Each claim is described using the following structure:
+
+Claim ID
+Claim Description (plain-language paraphrase)
+Manifest Binding (exact fields)
+Evaluation Surface (what checks it)
+Evidence Class (what can support it)
+
+────────────────────────────────────────
+BINDED CLAIMS
+────────────────────────────────────────
+
+CLAIM-001
+Description:
+The manifest declares all system actors explicitly and assigns exactly one
+canonical role per entity.
+
+Manifest Binding:
+- entities[].id
+- entities[].role
+
+Evaluation Surface:
+- SLML validator: role integrity and uniqueness checks
+
+Evidence Class:
+- Manifest text itself
+- Validator output confirming role integrity
+
+────────────────────────────────────────
+
+CLAIM-002
+Description:
+The manifest declares the same entity set as both the system’s users and
+beneficiaries.
+
+Manifest Binding:
+- system.declared_user_entities
+- system.declared_beneficiary_entities
+
+Evaluation Surface:
+- SLML validator: user–beneficiary alignment check
+
+Evidence Class:
+- Manifest text
+- Validator output confirming alignment
+
+────────────────────────────────────────
+
+CLAIM-003
+Description:
+The manifest asserts explicit ownership declaration and a downstream control
+direction toward the user.
+
+Manifest Binding:
+- ownership.ownership_explicit
+- ownership.control_direction
+
+Evaluation Surface:
+- SLML validator: ownership invariant checks
+
+Evidence Class:
+- Manifest text
+- Referenced contractual or policy documentation (supporting plausibility)
+
+────────────────────────────────────────
+
+CLAIM-004
+Description:
+The manifest asserts that consent is explicit, bounded, renegotiable, and not
+implied by use or dependency.
+
+Manifest Binding:
+- consent.consent_explicit
+- consent.implied_consent_accepted
+- consent.renegotiation_on_change
+- consent.consent_expires_at
+
+Evaluation Surface:
+- SLML validator: consent invariant checks
+
+Evidence Class:
+- Manifest text
+- Public consent, terms, or policy documentation
+
+────────────────────────────────────────
+
+CLAIM-005
+Description:
+The manifest declares a complete inconvenience model with explicit dimensions,
+normalized weights, and expected burdens for each declared user entity.
+
+Manifest Binding:
+- inconvenience.model.dimensions
+- inconvenience.weights
+- inconvenience.expected[]
+
+Evaluation Surface:
+- SLML validator: inconvenience structure, normalization, and coverage checks
+
+Evidence Class:
+- Manifest text
+- User documentation or disclosures corresponding to declared dimensions
+
+────────────────────────────────────────
+
+CLAIM-006
+Description:
+The manifest asserts that any user-facing obligation is informational in nature,
+revocable, non-coercive, and time-bounded.
+
+Manifest Binding:
+- obligations[].from
+- obligations[].to
+- obligations[].type
+- obligations[].revocable
+- obligations[].consent_required
+- obligations[].expires_at
+
+Evaluation Surface:
+- SLML validator: obligation direction and constraint checks
+
+Evidence Class:
+- Manifest text
+- Disclosure notices, changelogs, or user-facing informational materials
+
+────────────────────────────────────────
+IMPORTANT BOUNDARY
+────────────────────────────────────────
+
+These binded claims describe what is formally claimed and how those claims are
+evaluated under SLML v0.1.
+
+They do not prove real-world system behavior.
+They do not assert ethical quality.
+They do not substitute for empirical verification.
+
+They exist to ensure that claims are:
+- explicit
+- falsifiable
+- auditable
+- referentially grounded
+
+That boundary is intentional and invariant.
