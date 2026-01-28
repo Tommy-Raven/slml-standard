@@ -1,0 +1,107 @@
+{
+  "document": "v01_docs_json.RAW",
+  "applies_to": "SLML v0.1 (hawkseye)",
+  "normative": true,
+  "role": "BINDING_EVIDENCE_DOCUMENT",
+
+  "authority": {
+    "scope": "Evidence binding, traceability, and documentation admissibility",
+    "excludes": [
+      "validation adjudication",
+      "semantic interpretation",
+      "behavioral truth determination"
+    ]
+  },
+
+  "binding_rules": {
+    "purpose": [
+      "Define what documentation may be bound as evidence to SLML v0.1 manifests",
+      "Require traceable linkage between claims, manifests, validators, and documentation",
+      "Ensure reproducibility of validation against exact artifacts"
+    ],
+
+    "evidence_requirements": {
+      "each_evidence_entry_must_include": [
+        "evidence_id",
+        "evidence_class",
+        "description",
+        "reference",
+        "verifiability"
+      ],
+      "permitted_evidence_classes": [
+        "SPECIFICATION_ARTIFACT",
+        "EXECUTABLE_ARTIFACT",
+        "POLICY_DOCUMENTATION",
+        "USER_DOCUMENTATION",
+        "CHANGE_RECORD",
+        "TECHNICAL_DOCUMENTATION"
+      ]
+    },
+
+    "traceability_constraints": [
+      "Evidence entries MUST be referentially stable",
+      "Evidence entries MUST be independently verifiable",
+      "Evidence entries MUST support at least one declared claim",
+      "Evidence binding does not imply validator success"
+    ]
+  },
+
+  "example_binded_evidence": {
+    "evidence_registry_version": "v01",
+    "bound_to_manifest": "example_slml_v01_hawkseye_minimal_manifest.json",
+
+    "registry": [
+      {
+        "evidence_id": "E-001",
+        "evidence_class": "SPECIFICATION_ARTIFACT",
+        "description": "SLML v0.1 (hawkseye) canonical specification",
+        "reference": "standard_releases/v0.1_hawkseye/SPEC.toml",
+        "verifiability": "hash-verifiable, repository-stable"
+      },
+      {
+        "evidence_id": "E-002",
+        "evidence_class": "EXECUTABLE_ARTIFACT",
+        "description": "SLML v0.1 canonical validator",
+        "reference": "tools/validator/slml_validator_v01.py",
+        "verifiability": "hash-verifiable, deterministic"
+      },
+      {
+        "evidence_id": "E-003",
+        "evidence_class": "POLICY_DOCUMENTATION",
+        "description": "Public consent and data handling policy",
+        "reference": "https://example.org/consent-policy",
+        "verifiability": "public, date-stamped"
+      },
+      {
+        "evidence_id": "E-004",
+        "evidence_class": "USER_DOCUMENTATION",
+        "description": "User-facing documentation describing removal and behavior",
+        "reference": "https://example.org/user-docs/removal",
+        "verifiability": "public, versioned"
+      },
+      {
+        "evidence_id": "E-005",
+        "evidence_class": "CHANGE_RECORD",
+        "description": "Published update and change history",
+        "reference": "https://example.org/changelog",
+        "verifiability": "chronologically ordered, public"
+      },
+      {
+        "evidence_id": "E-006",
+        "evidence_class": "TECHNICAL_DOCUMENTATION",
+        "description": "Technical overview and privacy architecture",
+        "reference": "https://example.org/architecture",
+        "verifiability": "public, technically descriptive"
+      }
+    ]
+  },
+
+  "binding_boundary_statement": [
+    "This document normatively defines evidence binding under SLML v0.1.",
+    "The included evidence registry demonstrates correct binding structure.",
+    "Evidence supports claim auditability and traceability.",
+    "Evidence does not assert correctness of real-world behavior.",
+    "Validation outcomes remain solely determined by the SLML validator.",
+    "If a term has a binding definition in the standard, it is used deliberately—or not at all."
+  ]
+}
