@@ -1,0 +1,47 @@
+NON-NORMATIVE — HUMAN-READABLE CLAIMS GUIDE
+Example: example_slml_v01_hawkseye_minimal_manifest.json
+Target standard: SLML v0.1 (hawkseye)
+
+What this example shows
+1) How to make a minimal, machine-ingestible manifest that is eligible to be ADMISSIBLE.
+2) How to separate “claims” (the manifest) from “proof” (evidence pointers), while keeping both reproducible.
+3) How to satisfy hawkseye’s hard invariants with the smallest possible surface area.
+
+Core claims this manifest makes (in structured form)
+A. Role integrity and referential closure
+- Each entity has exactly one canonical role.
+- Entity IDs are unique.
+- Every referenced entity in system declarations, obligations, and inconvenience burdens exists.
+
+B. User–beneficiary alignment (mandatory in hawkseye)
+- The declared User set equals the declared Beneficiary set.
+- Therefore: the system claims it is designed such that the same entity is both consumer and beneficiary.
+
+C. Ownership direction (mandatory in hawkseye)
+- ownership_explicit = true
+- control_direction = DESIGNER_TO_USER
+This asserts the system claims a downstream control relationship toward the User.
+
+D. Consent (mandatory in hawkseye)
+- consent_explicit = true
+- implied_consent_accepted = false
+- renegotiation_on_change = true
+- consent_expires_at is present and bounded
+This asserts the system claims it does not treat use/dependency as consent, and that consent is time-bounded and renegotiable.
+
+E. Inconvenience model (mandatory in hawkseye)
+- Declares four dimensions: TIME, REMOVAL_DIFFICULTY, BEHAVIOR_CLARITY, PRIVACY_RISK
+- Declares non-negative weights that normalize exactly to 1.0
+- Provides expected burdens for each declared USER and each declared BENEFICIARY, using exactly the declared dimensions
+
+F. Obligations (strict)
+- Includes a single USER-directed obligation of type INFORMATIONAL_DISCLOSURE.
+- It is revocable, requires no consent, and has an expiry.
+- The obligation direction is PRODUCT → USER, which is the only allowed USER-facing direction in v0.1 validator logic.
+
+How to reuse this pattern safely
+- Replace entity IDs with your real system actors.
+- Keep USER and BENEFICIARY declarations identical under hawkseye.
+- Ensure weights sum to exactly 1.0.
+- Ensure each burden row contains exactly: “entity” plus the full dimension set (no extras, no missing keys).
+- Keep USER-directed obligations informational-only, revocable, consent_required=false, and expiring.
