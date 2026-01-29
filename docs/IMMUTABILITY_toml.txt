@@ -1,0 +1,253 @@
+IMMUTABILITY_toml.txt
+SLML — Structural Legitimacy Manifest Language
+Artifact: IMMUTABILITY.toml (NORMATIVE)
+Mirror Status: EXPLICATIVE (NON-NORMATIVE)
+Release Context: v0.1 "hawkseye"
+
+──────────────────────────────────────────────────────────────────────────────
+0. PURPOSE
+──────────────────────────────────────────────────────────────────────────────
+This document explains the operational governance rules encoded in
+IMMUTABILITY.toml.
+
+IMMUTABILITY.toml is authoritative. This file is not.
+
+This mirror exists to:
+- make the governance rules human-legible
+- prevent misinterpretation of what is authoritative
+- provide deterministic guidance without becoming executable input
+
+──────────────────────────────────────────────────────────────────────────────
+1. AUTHORITY MODEL (SINGLE CANONICAL ROOT)
+──────────────────────────────────────────────────────────────────────────────
+SLML authority is singular.
+
+Canonical authority location:
+- standards_released/v0.1_hawkseye/
+
+Only files under this path may be:
+- referenced in compliance claims
+- hashed for release integrity
+- used as normative input by validators
+
+Everything outside the canonical release root is non-authoritative by
+construction, even if content appears identical.
+
+This design implements “one throat to choke”:
+- one verifiable source of normative truth
+- zero ambiguous promotion paths
+
+──────────────────────────────────────────────────────────────────────────────
+2. COMPLIANCE CLAIM TRUTH CONDITIONS
+──────────────────────────────────────────────────────────────────────────────
+A compliance claim is only factually accurate if it includes:
+- the exact SLML version evaluated (e.g., v0.1)
+- the exact validator version used
+- the manifest hash
+- the terminal result (ADMISSIBLE or CORRUPTED)
+
+Claims that are disallowed unless accompanied by auditable evidence:
+- “SLML-aligned”
+- “SLML-inspired”
+- “Designed with SLML principles”
+- “Certified under SLML”
+
+These phrases are treated as incomplete or misleading without the
+required traceability.
+
+──────────────────────────────────────────────────────────────────────────────
+3. IMMUTABILITY (RELEASE FREEZE)
+──────────────────────────────────────────────────────────────────────────────
+Release artifacts are immutable.
+
+Once a versioned release directory exists as a published release,
+its authoritative bytes must not change.
+
+Any change affecting normative behavior requires a new release directory
+(e.g., v0.2_codename), not retroactive edits.
+
+Prohibited patterns include:
+- authoritative files outside the canonical release root
+- multiple authority roots
+- implicit promotion of drafts
+- validators inferring missing information
+- ambiguous or unverifiable hashing
+
+All ambiguity resolves to “non-authority” and “fail closed”.
+
+──────────────────────────────────────────────────────────────────────────────
+4. FILE CLASS DISCIPLINE (EXTENSION AS EPISTEMIC STATUS)
+──────────────────────────────────────────────────────────────────────────────
+File extensions encode epistemic status.
+
+A) Authoritative-only (.toml)
+- May exist only under standards_released/v0.1_hawkseye/
+- May be used as normative input
+- May be hashed for release integrity
+
+B) Draft / explicative / non-normative (.txt)
+- May exist anywhere
+- Must be non-executable
+- Must not be treated as normative input
+- Must not be hashed for release integrity
+
+C) Structured derivatives (.json)
+- May exist anywhere
+- Must remain TOML-aligned derivatives
+- Must not be treated as normative input
+- Must not be hashed for release integrity
+
+This prevents “helpful” drafts from silently becoming authority.
+
+──────────────────────────────────────────────────────────────────────────────
+5. REPO ROOT SEMANTICS (DRAFT MIRROR, NEVER AUTHORITY)
+──────────────────────────────────────────────────────────────────────────────
+The repository root is explicitly non-normative.
+
+It may mirror the canonical release for drafting and development, but it
+cannot become authoritative, regardless of similarity.
+
+The root is constrained to remain structurally faithful to the release:
+no creative drift.
+
+Hash reflection requirement:
+Draft mirrors must reflect the release hashing state by either:
+- embedding the release hash metadata, or
+- being provably byte-identical expressed as a .txt representation
+
+Hash metadata required in drafts:
+- release_version
+- release_codename
+- release_root
+- release_hash_algorithm
+- release_hash_value
+
+Hash visibility location is fixed:
+- HEADER_BLOCK
+
+This makes it mechanically checkable that a draft corresponds to a
+specific released authority state.
+
+──────────────────────────────────────────────────────────────────────────────
+6. /docs RULES (NON-NORMATIVE MIRROR COMPLETENESS)
+──────────────────────────────────────────────────────────────────────────────
+The documentation directory lives inside the release root:
+
+- standards_released/v0.1_hawkseye/docs
+
+/docs is explicitly non-normative.
+
+Docs must be:
+- verbose
+- human-facing
+- explicative
+- incapable of defining new normative rules
+
+Strict mirror invariant:
+For every authoritative file X.toml under the release root, there must
+exist exactly one docs mirror.
+
+Naming convention:
+- SAME_BASENAME_TXT
+Meaning:
+- X.toml → docs/X.txt
+
+Mechanically checkable invariants:
+- cardinality match between authoritative files and docs mirrors
+- basename correspondence
+- no orphan docs
+- no undocumented authority
+
+This makes documentation completeness a verifiable property, not a
+social promise.
+
+──────────────────────────────────────────────────────────────────────────────
+7. HASHING POLICY (DETERMINISTIC RELEASE INTEGRITY)
+──────────────────────────────────────────────────────────────────────────────
+Hashing is deterministic and reproducible.
+
+Defaults:
+- algorithm: SHA256
+- encoding: lowercase hex
+- canonicalization required: yes
+
+Hash scope includes:
+- all .toml files under standards_released/v0.1_hawkseye/**
+
+Hash scope excludes:
+- standards_released/v0.1_hawkseye/docs/**
+
+Binding directory:
+- relative name: BINDING
+- optional: true
+- must be explicitly scoped
+No implicit inclusion or omission is allowed.
+
+This prevents accidental changes to hash surfaces.
+
+──────────────────────────────────────────────────────────────────────────────
+8. VALIDATOR INVARIANTS (DETERMINISM, FAIL-CLOSED)
+──────────────────────────────────────────────────────────────────────────────
+Validators must be:
+- deterministic
+- fail closed
+- non-inferential
+- non-advisory
+- non-scoring
+
+Validators:
+- do not suggest fixes
+- do not infer missing data
+- do not assign scores
+- do not evaluate intent, legality, or quality
+
+Validator outputs apply to manifests, not systems.
+
+For v0.1, terminal outcomes are exactly:
+- ADMISSIBLE
+- CORRUPTED
+
+Validators must:
+- declare the exact target SLML version
+- implement invariants without extension, omission, or interpretation
+
+──────────────────────────────────────────────────────────────────────────────
+9. PROMOTION PATH (THE ONLY ALLOWED WAY TO BECOME AUTHORITY)
+──────────────────────────────────────────────────────────────────────────────
+Allowed promotion path:
+- draft → explicit copy into release root → hash → tag
+
+Prohibited promotion paths:
+- implicit promotion by reference
+- promotion by symlink
+- promotion by tool default paths
+- promotion by README claims
+
+Authority cannot be created by implication.
+
+──────────────────────────────────────────────────────────────────────────────
+10. ENFORCEMENT (REQUIRED CHECKS)
+──────────────────────────────────────────────────────────────────────────────
+Automated enforcement checks must exist to assert:
+
+- single canonical release root exists
+- no authoritative .toml exists outside release root
+- docs mirrors are complete and correctly mapped
+- hash scope matches policy
+- validator outcomes are restricted to the two terminal states
+- compliance claim template requirements are satisfied
+
+If enforcement fails, compliance claims are invalid.
+
+──────────────────────────────────────────────────────────────────────────────
+11. CHANGE CONTROL
+──────────────────────────────────────────────────────────────────────────────
+Governance changes require a governance_version bump.
+
+Any change affecting release semantics requires a new release directory.
+
+IMMUTABILITY.toml is the mechanism preventing accidental weakening.
+
+──────────────────────────────────────────────────────────────────────────────
+END OF IMMUTABILITY_toml.txt
+──────────────────────────────────────────────────────────────────────────────
