@@ -1,0 +1,151 @@
+[meta]
+standard_name = "SLML"
+governance_artifact = "IMMUTABILITY.toml"
+governance_version = "1.0"
+effective_release_version = "v0.1"
+effective_release_codename = "hawkseye"
+policy_status = "NORMATIVE"
+fail_closed = true
+
+[authority]
+canonical_release_root = "standards_released/v0.1_hawkseye"
+canonical_release_is_only_authority = true
+non_authoritative_roots = [
+  ".",
+  "docs",
+  "explained",
+  "validators",
+  "schemas",
+  "manifests",
+  "tools",
+  "standard_releases",
+  "standards",
+  "drafts"
+]
+compliance_claim_requires = [
+  "slml_version_exact",
+  "validator_version_exact",
+  "manifest_hash",
+  "result"
+]
+compliance_claim_may_not_use_phrases_without_evidence = [
+  "SLML-aligned",
+  "SLML-inspired",
+  "Designed with SLML principles",
+  "Certified under SLML"
+]
+
+[immutability]
+release_artifacts_are_immutable = true
+immutability_scope = [
+  "canonical_release_root/**"
+]
+changes_require_new_release_directory = true
+prohibited_patterns = [
+  "authoritative_files_outside_canonical_release_root",
+  "multiple_authority_roots",
+  "implicit_promotion_of_drafts",
+  "validator_inference_or_autofill",
+  "ambiguous_or_unverifiable_hashing"
+]
+
+[file_classes]
+
+[file_classes.authoritative_only]
+extensions = ["toml"]
+location_must_be_under = ["standards_released/v0.1_hawkseye"]
+may_be_used_as_normative_input = true
+may_be_hashed_for_release_integrity = true
+
+[file_classes.draft_or_explicative_non_normative]
+extensions = ["txt"]
+location_may_be_anywhere = true
+must_be_non_executable = true
+may_be_used_as_normative_input = false
+may_be_hashed_for_release_integrity = false
+
+[file_classes.structured_derivative_non_normative]
+extensions = ["json"]
+location_may_be_anywhere = true
+must_be_toml_aligned = true
+may_be_used_as_normative_input = false
+may_be_hashed_for_release_integrity = false
+
+[mirroring]
+repo_root_is_non_normative = true
+repo_root_is_drafting_mirror_of_release = true
+repo_root_must_not_drift_structurally = true
+hash_reflection_required_for_drafts = true
+draft_hash_reference_required_fields = [
+  "release_version",
+  "release_codename",
+  "release_root",
+  "release_hash_algorithm",
+  "release_hash_value"
+]
+draft_hash_visibility_location = "HEADER_BLOCK"
+
+[docs]
+docs_root = "standards_released/v0.1_hawkseye/docs"
+docs_are_non_normative = true
+docs_are_verbose_human_facing = true
+docs_must_have_exactly_one_mirror_per_authoritative_file = true
+docs_mirror_must_not_create_new_normative_rules = true
+docs_mirror_naming_convention = "SAME_BASENAME_TXT"
+docs_mirror_invariant_checks = [
+  "cardinality_match",
+  "basename_correspondence",
+  "no_orphan_docs",
+  "no_undocumented_authority"
+]
+
+[hashing]
+hash_algorithm = "SHA256"
+hash_encoding = "hex_lower"
+hash_canonicalization_required = true
+hash_scope_include_globs = [
+  "standards_released/v0.1_hawkseye/**/*.toml"
+]
+hash_scope_exclude_globs = [
+  "standards_released/v0.1_hawkseye/docs/**"
+]
+binding_dir_relative = "BINDING"
+binding_is_optional = true
+binding_must_be_explicitly_scoped = true
+
+[validator]
+validator_must_be_deterministic = true
+validator_must_fail_closed = true
+validator_must_not_infer_missing_information = true
+validator_must_not_suggest_fixes = true
+validator_must_not_assign_scores = true
+validator_outputs_apply_to_manifests_not_systems = true
+validator_outcomes = ["ADMISSIBLE", "CORRUPTED"]
+validator_must_declare_target_slml_version = true
+validator_must_not_extend_or_omit_invariants = true
+
+[promotion]
+promotion_paths_allowed = [
+  "draft_to_release_via_explicit_copy_and_hash"
+]
+promotion_paths_prohibited = [
+  "implicit_promotion_by_reference",
+  "promotion_by_symlink",
+  "promotion_by_tool_default_paths",
+  "promotion_by_readme_claims"
+]
+
+[enforcement]
+required_automated_checks = [
+  "assert_single_canonical_release_root_exists",
+  "assert_no_authoritative_toml_outside_release_root",
+  "assert_docs_mirror_cardinality_and_mapping",
+  "assert_hash_scope_matches_policy",
+  "assert_validator_outputs_restricted_to_two_states",
+  "assert_compliance_claim_template_requires_hash_and_version"
+]
+enforcement_failure_invalidates_compliance_claims = true
+
+[change_control]
+governance_changes_require_version_bump = true
+changes_affecting_release_semantics_require_new_release_directory = true
