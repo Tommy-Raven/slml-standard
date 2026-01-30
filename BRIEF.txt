@@ -1,0 +1,167 @@
+INSTITUTIONAL BRIEF
+STRUCTURAL LEGITIMACY MARKUP LANGUAGE (SLML)
+===========================================
+
+STATUS
+------
+
+This document is NON-NORMATIVE.
+
+It does not define, modify, or extend the SLML standard.
+Normative authority exists exclusively under:
+
+  standard_released/Implementation/
+
+This brief exists to provide institutional context, explanatory
+framing, and interpretive clarity for readers evaluating the
+purpose and limits of SLML.
+
+
+PURPOSE
+-------
+
+The Structural Legitimacy Markup Language (SLML) is a standardized,
+binary-output, deterministic evaluation framework intended to
+assess whether a system is structurally admissible to claim
+user-serving legitimacy.
+
+SLML addresses a specific institutional gap:
+
+Existing mechanisms such as ethics guidelines, audits, compliance
+programs, and fact-checking systems primarily evaluate intent,
+outcomes, or content after harm has occurred.
+
+SLML evaluates structure at design time.
+
+
+SCOPE OF EVALUATION
+-------------------
+
+SLML evaluates ONLY structural admissibility.
+
+Specifically, it examines whether a system’s design satisfies
+explicit, user-facing structural conditions, including but not
+limited to:
+
+- explicit ownership
+- explicit consent
+- obligation directionality
+- inconvenience symmetry
+
+SLML does NOT evaluate:
+
+- moral intent
+- legality
+- popularity
+- utility
+- benefit aggregation
+- outcome quality
+- harm severity
+- policy compliance
+
+SLML produces no scores, rankings, or gradients.
+
+The result of evaluation is always exactly one of:
+
+  ADMISSIBLE
+  or
+  CORRUPTED
+
+
+NON-AUTHORIZATION CLARIFICATION
+-------------------------------
+
+SLML is an evaluative framework only.
+
+It does NOT:
+
+- authorize or permit action
+- license or certify systems
+- validate or endorse claims
+- approve, ratify, or sanction behavior
+- confer legitimacy, legality, or compliance
+- grant rights, privileges, or entitlements
+- substitute for governance, law, or oversight
+
+No SLML output constitutes permission, approval, or authority of
+any kind.
+
+
+RELATION TO TRUTH VECTOR SEMANTICS (TVS)
+---------------------------------------
+
+Truth Vector Semantics (TVS) is a companion semantic classification
+framework.
+
+TVS classifies representations (claims, disclosures, outputs)
+into semantic categories such as:
+
+- ERROR
+- LIE
+- MISLEADING_TRUTH
+- FICTION
+
+TVS is orthogonal to SLML.
+
+A system may be structurally admissible under SLML and still
+produce misleading or false representations.
+
+SLML evaluates structure.
+TVS evaluates semantic truth conditions.
+
+
+INTENDED INSTITUTIONAL USE
+--------------------------
+
+SLML is intended to be used as:
+
+- a pre-deployment design evaluation lens
+- a structural admissibility gate
+- a diagnostic tool for identifying legitimacy claims that
+  cannot be structurally supported
+
+SLML is NOT intended to:
+
+- replace institutional judgment
+- automate enforcement decisions
+- adjudicate disputes
+- determine compliance or liability
+- serve as a regulatory proxy
+
+Institutions remain responsible for interpretation, governance,
+and decision-making.
+
+
+LIMITATIONS
+-----------
+
+SLML makes no claims about:
+
+- ethical sufficiency
+- legal compliance
+- social desirability
+- fairness outcomes
+- policy alignment
+
+SLML deliberately limits its scope to structural conditions in
+order to avoid conflating admissibility with approval.
+
+
+INTERPRETATION NOTICE
+---------------------
+
+This brief is provided solely for explanatory purposes.
+
+In the event of conflict, ambiguity, or interpretive dispute,
+the normative specification under:
+
+  standard_released/Implementation/
+
+controls exclusively.
+
+No interpretation derived from this document supersedes or
+modifies released normative artifacts.
+
+
+END OF BRIEF
+------------
