@@ -1,3 +1,7 @@
+# This manifest characterizes a contemporary infrastructure system whose 
+# evaluation criteria are limited to primary functional performance, with 
+# secondary system effects treated as exogenous.”
+
 {
   "status": "admissible",
   "standard": "SLML_v0.1",
