@@ -1,0 +1,171 @@
+{
+  "status": "admissible",
+  "standard": "SLML_v0.1 hawkseye",
+
+  "manifest": {
+    "type": "machine_ingestible_system_claim",
+    "traceability": true,
+    "scope_note": "Represents generalized modern municipal stormwater infrastructure practice in the United States. Not project-specific."
+  },
+
+  "entities": {
+    "resident": {
+      "role": "user",
+      "description": "Property owner or resident within service area receiving stormwater services"
+    },
+
+    "municipality": {
+      "role": "designer",
+      "description": "Municipal authority responsible for design, construction, and governance of stormwater infrastructure"
+    },
+
+    "stormwater_system": {
+      "role": "system",
+      "description": "Integrated stormwater conveyance, detention, and discharge pipeline"
+    },
+
+    "stormwater_program": {
+      "role": "product",
+      "description": "Non-autonomous infrastructure artifact delivered as a public utility service"
+    },
+
+    "conveyance_channel": {
+      "role": "component",
+      "description": "Primary engineered channel or conduit for runoff conveyance"
+    },
+
+    "inlet_network": {
+      "role": "component",
+      "description": "Distributed collection points routing runoff into the system"
+    },
+
+    "outfall_structure": {
+      "role": "component",
+      "description": "Terminal discharge interfaces to receiving waters"
+    },
+
+    "detention_features": {
+      "role": "component",
+      "description": "Basins or features intended to regulate peak flow"
+    },
+
+    "operations_maintenance": {
+      "role": "component",
+      "description": "Operational and maintenance protocols and labor"
+    },
+
+    "monitoring_compliance": {
+      "role": "component",
+      "description": "Regulatory monitoring, reporting, and modeling activities"
+    }
+  },
+
+  "role_analysis": {
+    "user_equals_beneficiary": false,
+    "basis": "Observed practice indicates residents receive service but also absorb secondary burdens not minimized by system design"
+  },
+
+  "ownership": {
+    "directional_ownership": true,
+    "control_direction": "designer_to_product_to_user",
+    "fact_note": "Municipalities retain operational control; users do not exercise direct control over system behavior"
+  },
+
+  "consent": {
+    "explicit_consent_required": true,
+    "explicit_consent_obtained": false,
+    "fact_note": "Use of infrastructure is compulsory for residents within jurisdiction; consent is not individually negotiated",
+    "implied_consent_accepted": true
+  },
+
+  "inconvenience": {
+    "definition": "Declared burden imposed by a system",
+
+    "observed_flows": {
+      "time": {
+        "borne_by": "resident",
+        "fact_basis": "Time spent mitigating flooding, pests, or exposure is typically unmanaged by system"
+      },
+      "health_risk": {
+        "borne_by": "resident",
+        "fact_basis": "Vector exposure and water quality impacts are external to primary system objective"
+      },
+      "financial_cost": {
+        "borne_by": "resident",
+        "fact_basis": "Private mitigation (repellents, barriers, repairs) is not compensated"
+      },
+      "agency_loss": {
+        "borne_by": "resident",
+        "fact_basis": "Residents cannot opt out or modify system operation"
+      },
+      "transparency_gap": {
+        "borne_by": "resident",
+        "fact_basis": "Secondary effects are not typically disclosed in design documentation"
+      }
+    }
+  },
+
+  "system_outputs": {
+    "primary": {
+      "verifiable_function": "Runoff conveyance and flood risk reduction",
+      "evaluation_metric": "Peak flow capacity and drainage performance"
+    },
+
+    "secondary": {
+      "verifiable_effects": [
+        "Altered flow timing",
+        "Standing water persistence",
+        "Resource concentration in channels and basins"
+      ],
+      "note": "These effects are documented in hydrologic and ecological literature as common byproducts of stormwater systems"
+    },
+
+    "tertiary": {
+      "verifiable_effects": [
+        "Increased human exposure to nuisance and vector organisms",
+        "Localized maintenance burdens"
+      ],
+      "note": "These effects are typically managed outside system scope"
+    }
+  },
+
+  "obligations": {
+    "documented": [
+      {
+        "type": "informational_disclosure",
+        "from": "municipality",
+        "to": "regulatory_agency",
+        "scope": [
+          "water_quality_compliance",
+          "permit_reporting"
+        ],
+        "fact_basis": "NPDES / MS4 regulatory requirements"
+      }
+    ],
+
+    "absent": [
+      {
+        "type": "informational_disclosure",
+        "from": "stormwater_system",
+        "to": "resident",
+        "scope": [
+          "secondary_system_outputs",
+          "biological amplification risks",
+          "exposure pathways"
+        ],
+        "fact_basis": "Not required under standard municipal disclosure practice"
+      }
+    ]
+  },
+
+  "system_state_assessment": {
+    "role_flow_invariance_satisfied": false,
+    "reason": [
+      "User != Beneficiary",
+      "Inconvenience flows toward User",
+      "Consent is implied rather than explicit"
+    ],
+    "classification": "corrupted",
+    "definition_reference": "Systems_corruption per glossary"
+  }
+}
