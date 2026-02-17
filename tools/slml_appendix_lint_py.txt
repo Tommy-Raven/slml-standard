@@ -1,0 +1,493 @@
+#!/usr/bin/env python3
+"""
+APPENDIX TOOL: SLML Repo Linter + Pre-Manifest Audit (SCA-lite)
+Non-authoritative. Advisory only.
+
+- Lints repo file/directory naming + extensions (per your conventions)
+- Performs a strict pre-manifest audit on JSON manifests (structure + invariants-ish)
+- Does NOT decide ADMISSIBLE/CORRUPTED. The canonical validator decides.
+
+Recommended path:
+  APPENDIX/tooling/slml_appendix_lint.py
+
+Usage:
+  python slml_appendix_lint.py repo-lint /path/to/repo
+  python slml_appendix_lint.py manifest-audit /path/to/manifest.json
+  python slml_appendix_lint.py manifest-audit --glob "/repo/**/v*_manifest.json"
+  python slml_appendix_lint.py all /path/to/repo --glob "**/*manifest.json"
+Exit codes:
+  0 = no findings
+  1 = findings present
+"""
+
+from __future__ import annotations
+
+import argparse
+import fnmatch
+import glob
+import json
+import os
+import re
+import sys
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Sequence, Tuple
+
+# ----------------------------
+# Conventions (Appendix policy)
+# ----------------------------
+
+FORBIDDEN_EXTS = {".md", ".markdown", ".yaml", ".yml"}
+ALLOWED_EXTS = {".txt", ".RAW", ".json", ".py", ".toml", ".slml"}
+
+# Case rules (as-stated)
+ACRONYM_ALL_CAPS = True
+RELEASE_CASE = "lower"
+CODENAME_CASE = "lower"
+CODENAME_NO_SPACES = True
+
+# "snake_case" baseline
+SNAKE_TOKEN_RE = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*$")
+
+# "formal.name_case = all caps"
+FORMAL_FILE_RE = re.compile(r"^[A-Z0-9]+(?:_[A-Z0-9]+)*\.[A-Za-z0-9]+$")
+
+# File name syntax (per your stated grammar)
+# "[vXX]_[adv/adj(s)]_[noun(s)]_{[normative.extension]}.[released.ext]"
+# Example: v01_bobbing_heavy_apples_py.RAW
+# Implementation:
+# - must start with v + 2 digits (v01)
+# - must have >= 3 underscore-separated tokens before last extension
+# - final token before extension is the "normative.extension" marker (e.g., py, json, toml, slml, txt, RAW)
+FILE_SYNTAX_RE = re.compile(r"^v(?P<v>\d{2})_(?P<body>.+)_(?P<meta>[A-Za-z0-9]+)\.(?P<ext>[A-Za-z0-9]+)$")
+
+# Directory name syntax (two allowed patterns)
+# 1) "[v.XX]_[NORM]_[noun]_[adj/adv(s)]/"
+# 2) "[v.X]_[referral noun]_[NORM]_[noun/adj/adv(s)]/"
+# We'll be permissive while still enforcing version prefix and useful casing.
+DIR_VDOT_RE = re.compile(r"^v(?P<maj>\d)\.(?P<min>\d{2})_(?P<rest>.+)$")
+DIR_VSHORT_RE = re.compile(r"^v(?P<maj>\d)\.(?P<min>\d)_(?P<rest>.+)$")
+
+# Known “mixed-casing allowed” patterns (explicit allowlist)
+MIXED_CASE_ALLOWLIST = {
+    "REFERENCES",
+    "REFERENCE",
+    "APPENDIX",
+    "CONTRIBUTORS",
+}
+
+# SLML v0.1 hawkseye-ish manifest pre-audit expectations
+CANONICAL_ROLES = {"DESIGNER", "USER", "BENEFICIARY", "COMPONENT", "PRODUCT", "SYSTEM"}
+REQUIRED_TOP_LEVEL_KEYS = {"entities", "system", "ownership", "consent", "inconvenience", "obligations"}
+
+
+# ----------------------------
+# Finding model
+# ----------------------------
+
+@dataclass(frozen=True)
+class Finding:
+    code: str
+    severity: str  # "WARN" or "ERROR"
+    path: str
+    message: str
+
+
+def _relpath(path: str, base: str) -> str:
+    try:
+        return os.path.relpath(path, base)
+    except Exception:
+        return path
+
+
+def _ext(name: str) -> str:
+    return os.path.splitext(name)[1]  # includes dot
+
+
+def _is_ascii(s: str) -> bool:
+    try:
+        s.encode("ascii")
+        return True
+    except Exception:
+        return False
+
+
+def _has_spaces(s: str) -> bool:
+    return any(ch.isspace() for ch in s)
+
+
+# ----------------------------
+# Repo lint
+# ----------------------------
+
+def lint_repo(repo_root: str) -> List[Finding]:
+    findings: List[Finding] = []
+    repo_root = os.path.abspath(repo_root)
+
+    for dirpath, dirnames, filenames in os.walk(repo_root):
+        # Skip VCS / noisy dirs
+        base = os.path.basename(dirpath)
+        if base in {".git", ".venv", "__pycache__", "node_modules"}:
+            dirnames[:] = []
+            continue
+
+        # Directory name checks (only check leaf names; root is exempt)
+        if dirpath != repo_root:
+            dname = os.path.basename(dirpath)
+            findings.extend(_lint_dir_name(dname, dirpath, repo_root))
+
+        # File checks
+        for fn in filenames:
+            fpath = os.path.join(dirpath, fn)
+            findings.extend(_lint_file_name(fn, fpath, repo_root))
+
+    return findings
+
+
+def _lint_dir_name(dname: str, full_path: str, repo_root: str) -> List[Finding]:
+    findings: List[Finding] = []
+
+    # Basic ASCII sanity for deterministic tooling
+    if not _is_ascii(dname):
+        findings.append(Finding("L001_DIR_NON_ASCII", "ERROR", _relpath(full_path, repo_root),
+                                "Directory name contains non-ASCII characters."))
+
+    if CODENAME_NO_SPACES and _has_spaces(dname):
+        findings.append(Finding("L002_DIR_SPACES", "ERROR", _relpath(full_path, repo_root),
+                                "Directory name contains whitespace; codename_no.spaces=true."))
+
+    # Allowlist for well-known mixed-case container dirs
+    if dname in MIXED_CASE_ALLOWLIST:
+        return findings
+
+    # For most dirs, prefer snake_case OR versioned patterns.
+    if SNAKE_TOKEN_RE.match(dname):
+        return findings
+
+    # Versioned patterns with v0.1_...
+    if DIR_VDOT_RE.match(dname) or DIR_VSHORT_RE.match(dname):
+        # After version prefix, allow mixed casing for REF/NORM tokens, but enforce no spaces.
+        return findings
+
+    # If it's all caps, treat as "formal" style directory (rare but permitted by your mixed rule)
+    if dname.isupper():
+        return findings
+
+    findings.append(Finding("L003_DIR_NAMING", "WARN", _relpath(full_path, repo_root),
+                            "Directory name does not match snake_case or versioned naming patterns."))
+
+    return findings
+
+
+def _lint_file_name(fname: str, full_path: str, repo_root: str) -> List[Finding]:
+    findings: List[Finding] = []
+    ext = _ext(fname)
+
+    if ext in FORBIDDEN_EXTS:
+        findings.append(Finding("L010_EXT_FORBIDDEN", "ERROR", _relpath(full_path, repo_root),
+                                f"Forbidden extension '{ext}'."))
+
+    # If extension is unknown, warn
+    if ext and ext not in ALLOWED_EXTS and ext not in FORBIDDEN_EXTS:
+        findings.append(Finding("L011_EXT_UNKNOWN", "WARN", _relpath(full_path, repo_root),
+                                f"Extension '{ext}' not in allowed set {sorted(ALLOWED_EXTS)}."))
+
+    # ASCII sanity
+    if not _is_ascii(fname):
+        findings.append(Finding("L012_FILE_NON_ASCII", "ERROR", _relpath(full_path, repo_root),
+                                "File name contains non-ASCII characters."))
+
+    # Spaces forbidden (consistent with codename_no.spaces; also good repo hygiene)
+    if _has_spaces(fname):
+        findings.append(Finding("L013_FILE_SPACES", "ERROR", _relpath(full_path, repo_root),
+                                "File name contains whitespace."))
+
+    # Formal file rule (ALL_CAPS) is allowed, but then it should look formal.
+    base = os.path.basename(fname)
+    if base.isupper() and not FORMAL_FILE_RE.match(base):
+        findings.append(Finding("L014_FORMAL_NAME_SHAPE", "WARN", _relpath(full_path, repo_root),
+                                "ALL_CAPS file name does not match FORMAL_FILE pattern."))
+
+    # Normative naming syntax for versioned files: v01_..._py.RAW etc
+    m = FILE_SYNTAX_RE.match(fname)
+    if m:
+        meta = m.group("meta")
+        real_ext = m.group("ext")
+
+        # extension check
+        if f".{real_ext}" not in ALLOWED_EXTS:
+            findings.append(Finding("L015_RELEASED_EXT_INVALID", "ERROR", _relpath(full_path, repo_root),
+                                    f"Released extension '.{real_ext}' not allowed."))
+
+        # "normative.extension" marker should be sane
+        # Accept: py,json,toml,slml,txt,RAW (marker without dot)
+        if meta not in {"py", "json", "toml", "slml", "txt", "RAW"}:
+            findings.append(Finding("L016_META_TOKEN_UNKNOWN", "WARN", _relpath(full_path, repo_root),
+                                    f"Meta token '{meta}' (normative.extension marker) is unusual."))
+
+        # Body token casing: prefer snake_case-ish, allow mixed for REFERENCES, READMEs, etc.
+        body = m.group("body")
+        # enforce no spaces already; just warn if odd punctuation
+        if not re.fullmatch(r"[A-Za-z0-9_]+", body):
+            findings.append(Finding("L017_BODY_CHARS", "WARN", _relpath(full_path, repo_root),
+                                    "Body contains characters outside [A-Za-z0-9_]."))
+
+    else:
+        # Not every file must be versioned, but for canonical-ish areas it usually should be.
+        # We'll warn only if it *looks* like it should be versioned (contains 'v0' or 'v01').
+        if re.search(r"\bv\d", fname) and not fname.startswith("v"):
+            findings.append(Finding("L018_VERSION_TOKEN_POSITION", "WARN", _relpath(full_path, repo_root),
+                                    "Version token present but file does not start with 'vXX_'."))
+
+    return findings
+
+
+# ----------------------------
+# Manifest pre-audit (SCA-lite)
+# ----------------------------
+
+def audit_manifest(path: str) -> List[Finding]:
+    findings: List[Finding] = []
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as e:
+        return [Finding("M000_PARSE_FAILURE", "ERROR", path, f"JSON parse failed: {e}")]
+
+    # Strict dict
+    if not isinstance(data, dict):
+        return [Finding("M001_NOT_OBJECT", "ERROR", path, "Manifest root must be a JSON object.")]
+
+    # Dotted keys forbidden at top-level (and generally suspicious anywhere)
+    for k in data.keys():
+        if not isinstance(k, str):
+            findings.append(Finding("M002_NON_STRING_KEY", "ERROR", path, "Non-string key at top level."))
+        if "." in k:
+            findings.append(Finding("M003_DOTTED_KEY", "ERROR", path, f"Dotted key forbidden: '{k}'."))
+
+    # Required top-level keys
+    missing = REQUIRED_TOP_LEVEL_KEYS - set(data.keys())
+    if missing:
+        findings.append(Finding("M004_MISSING_TOP_LEVEL", "ERROR", path, f"Missing top-level keys: {sorted(missing)}"))
+        # If core keys missing, further checks are noisy; return now.
+        return findings
+
+    # Types
+    if not isinstance(data["entities"], list):
+        findings.append(Finding("M005_ENTITIES_TYPE", "ERROR", path, "entities must be a list."))
+        return findings
+    if not isinstance(data["obligations"], list):
+        findings.append(Finding("M006_OBLIGATIONS_TYPE", "ERROR", path, "obligations must be a list."))
+        return findings
+    for k in ("system", "ownership", "consent", "inconvenience"):
+        if not isinstance(data.get(k), dict):
+            findings.append(Finding("M007_SECTION_TYPE", "ERROR", path, f"{k} must be an object."))
+            return findings
+
+    # Entity index: unique IDs, one role per entity, canonical roles
+    entity_index: Dict[str, str] = {}
+    for i, e in enumerate(data["entities"]):
+        if not isinstance(e, dict):
+            findings.append(Finding("M010_ENTITY_NOT_OBJECT", "ERROR", path, f"entities[{i}] must be an object."))
+            continue
+        eid = e.get("id")
+        role = e.get("role")
+        if not isinstance(eid, str) or not eid:
+            findings.append(Finding("M011_ENTITY_ID", "ERROR", path, f"entities[{i}].id must be non-empty string."))
+            continue
+        if not isinstance(role, str) or role not in CANONICAL_ROLES:
+            findings.append(Finding("M012_ENTITY_ROLE", "ERROR", path, f"entities[{i}].role invalid: {role!r}"))
+            continue
+        if eid in entity_index:
+            findings.append(Finding("M013_ENTITY_DUP_ID", "ERROR", path, f"Duplicate entity id: {eid}"))
+            continue
+        entity_index[eid] = role
+
+    # System declared sets exist and referentially closed
+    system = data["system"]
+    users = system.get("declared_user_entities")
+    bens = system.get("declared_beneficiary_entities")
+    if not isinstance(users, list) or not isinstance(bens, list):
+        findings.append(Finding("M020_SYSTEM_DECLS", "ERROR", path,
+                                "system.declared_user_entities and declared_beneficiary_entities must be lists."))
+    else:
+        # all ids exist
+        for eid in users + bens:
+            if not isinstance(eid, str) or eid not in entity_index:
+                findings.append(Finding("M021_SYSTEM_REF", "ERROR", path, f"Declared entity not found: {eid!r}"))
+        # alignment (hawkseye requirement)
+        if set(users) != set(bens):
+            findings.append(Finding("M022_USER_BEN_MISMATCH", "ERROR", path,
+                                    "declared_user_entities must equal declared_beneficiary_entities."))
+
+    # Ownership strictness (your v0.1 invariants)
+    ownership = data["ownership"]
+    if ownership.get("ownership_explicit") is not True:
+        findings.append(Finding("M030_OWNERSHIP_EXPLICIT", "ERROR", path, "ownership_explicit must be true."))
+    if ownership.get("control_direction") != "DESIGNER_TO_USER":
+        findings.append(Finding("M031_CONTROL_DIRECTION", "ERROR", path, "control_direction must be DESIGNER_TO_USER."))
+
+    # Consent strictness
+    consent = data["consent"]
+    if consent.get("consent_explicit") is not True:
+        findings.append(Finding("M040_CONSENT_EXPLICIT", "ERROR", path, "consent_explicit must be true."))
+    if consent.get("implied_consent_accepted") is not False:
+        findings.append(Finding("M041_IMPLIED_CONSENT", "ERROR", path, "implied_consent_accepted must be false."))
+    if consent.get("renegotiation_on_change") is not True:
+        findings.append(Finding("M042_RENEGOTIATION", "ERROR", path, "renegotiation_on_change must be true."))
+    if not isinstance(consent.get("consent_expires_at"), str) or not consent.get("consent_expires_at"):
+        findings.append(Finding("M043_CONSENT_EXPIRY", "ERROR", path, "consent_expires_at must be a non-empty string."))
+
+    # Inconvenience strictness: model.dimensions list, weights normalize, coverage keys equal
+    inc = data["inconvenience"]
+    model = inc.get("model")
+    weights = inc.get("weights")
+    expected = inc.get("expected")
+    if not isinstance(model, dict) or not isinstance(model.get("dimensions"), list) or not model["dimensions"]:
+        findings.append(Finding("M050_DIMENSIONS", "ERROR", path, "inconvenience.model.dimensions must be a non-empty list."))
+        return findings
+    dims = model["dimensions"]
+    if not all(isinstance(d, str) for d in dims):
+        findings.append(Finding("M051_DIMENSIONS_TYPE", "ERROR", path, "All dimensions must be strings."))
+        return findings
+
+    if not isinstance(weights, dict) or not weights:
+        findings.append(Finding("M052_WEIGHTS", "ERROR", path, "inconvenience.weights must be a non-empty object."))
+    else:
+        if set(weights.keys()) != set(dims):
+            findings.append(Finding("M053_WEIGHTS_KEYS", "ERROR", path, "weights keys must exactly match dimensions."))
+        ws = 0.0
+        for k, v in weights.items():
+            if not isinstance(v, (int, float)):
+                findings.append(Finding("M054_WEIGHT_NUM", "ERROR", path, f"Weight for {k} must be numeric."))
+                continue
+            if v < 0:
+                findings.append(Finding("M055_WEIGHT_NEG", "ERROR", path, f"Weight for {k} must be non-negative."))
+            ws += float(v)
+        if abs(ws - 1.0) > 1e-9:
+            findings.append(Finding("M056_WEIGHT_SUM", "ERROR", path, f"Weights must sum to 1.0 exactly; got {ws}"))
+
+    if not isinstance(expected, list) or not expected:
+        findings.append(Finding("M060_EXPECTED", "ERROR", path, "inconvenience.expected must be a non-empty list."))
+    else:
+        dimset = set(dims)
+        for i, b in enumerate(expected):
+            if not isinstance(b, dict) or "entity" not in b:
+                findings.append(Finding("M061_BURDEN_SHAPE", "ERROR", path, f"expected[{i}] must be object with 'entity'."))
+                continue
+            eid = b.get("entity")
+            if not isinstance(eid, str) or eid not in entity_index:
+                findings.append(Finding("M062_BURDEN_ENTITY", "ERROR", path, f"expected[{i}].entity invalid: {eid!r}"))
+            keys = set(b.keys()) - {"entity"}
+            if keys != dimset:
+                findings.append(Finding("M063_BURDEN_KEYS", "ERROR", path,
+                                        f"expected[{i}] must contain exactly dimensions {sorted(dimset)}; got {sorted(keys)}"))
+            for d in dims:
+                if d in b and not isinstance(b[d], (int, float)):
+                    findings.append(Finding("M064_BURDEN_NUM", "ERROR", path,
+                                            f"expected[{i}].{d} must be numeric."))
+
+    # Obligations: shape check (advisory; your validator is the authority)
+    for i, o in enumerate(data["obligations"]):
+        if not isinstance(o, dict):
+            findings.append(Finding("M070_OBL_NOT_OBJECT", "ERROR", path, f"obligations[{i}] must be an object."))
+            continue
+        for req in ("id", "from", "to", "type"):
+            if req not in o:
+                findings.append(Finding("M071_OBL_MISSING", "ERROR", path, f"obligations[{i}] missing '{req}'."))
+        fr, to = o.get("from"), o.get("to")
+        if isinstance(fr, str) and fr not in entity_index:
+            findings.append(Finding("M072_OBL_REF", "ERROR", path, f"obligations[{i}].from unknown: {fr}"))
+        if isinstance(to, str) and to not in entity_index:
+            findings.append(Finding("M073_OBL_REF", "ERROR", path, f"obligations[{i}].to unknown: {to}"))
+        if not o.get("expires_at"):
+            findings.append(Finding("M074_OBL_EXPIRY", "ERROR", path, f"obligations[{i}].expires_at required."))
+        # User-directed constraints (advisory)
+        if isinstance(to, str) and entity_index.get(to) == "USER":
+            if o.get("type") != "INFORMATIONAL_DISCLOSURE":
+                findings.append(Finding("M075_USER_OBL_TYPE", "ERROR", path, f"obligations[{i}] user-directed must be INFORMATIONAL_DISCLOSURE."))
+            if o.get("revocable") is not True:
+                findings.append(Finding("M076_USER_OBL_REVOCABLE", "ERROR", path, f"obligations[{i}] user-directed must be revocable=true."))
+            if o.get("consent_required") is not False:
+                findings.append(Finding("M077_USER_OBL_CONSENT", "ERROR", path, f"obligations[{i}] user-directed must have consent_required=false."))
+
+    return findings
+
+
+# ----------------------------
+# CLI
+# ----------------------------
+
+def _format_findings(findings: Sequence[Finding]) -> str:
+    if not findings:
+        return "OK: no findings\n"
+    # stable sort: severity then code then path
+    sev_rank = {"ERROR": 0, "WARN": 1}
+    items = sorted(findings, key=lambda f: (sev_rank.get(f.severity, 9), f.code, f.path))
+    lines = []
+    for f in items:
+        lines.append(f"{f.severity} {f.code} {f.path} :: {f.message}")
+    lines.append(f"\nTOTAL: {len(items)} findings")
+    return "\n".join(lines) + "\n"
+
+
+def _glob_paths(pattern: str) -> List[str]:
+    return [p for p in glob.glob(pattern, recursive=True) if os.path.isfile(p)]
+
+
+def main(argv: Optional[Sequence[str]] = None) -> int:
+    ap = argparse.ArgumentParser(prog="slml_appendix_lint.py", add_help=True)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+
+    ap_repo = sub.add_parser("repo-lint", help="lint naming conventions and extensions in a repo")
+    ap_repo.add_argument("repo_root", help="path to repo root")
+
+    ap_man = sub.add_parser("manifest-audit", help="pre-audit one or more manifests (JSON)")
+    ap_man.add_argument("manifest", nargs="?", help="path to a manifest.json")
+    ap_man.add_argument("--glob", dest="glob_pat", help="glob pattern for manifests (recursive ok)")
+
+    ap_all = sub.add_parser("all", help="repo-lint + manifest-audit over a repo")
+    ap_all.add_argument("repo_root", help="path to repo root")
+    ap_all.add_argument("--glob", dest="glob_pat", default="**/*manifest.json", help="glob for manifest files under repo")
+
+    args = ap.parse_args(argv)
+
+    findings: List[Finding] = []
+
+    if args.cmd == "repo-lint":
+        findings = lint_repo(args.repo_root)
+        print(_format_findings(findings))
+        return 1 if findings else 0
+
+    if args.cmd == "manifest-audit":
+        paths: List[str] = []
+        if args.manifest:
+            paths.append(args.manifest)
+        if args.glob_pat:
+            paths.extend(_glob_paths(args.glob_pat))
+        paths = sorted(set(paths))
+        if not paths:
+            print("ERROR: no manifest paths provided.\n", file=sys.stderr)
+            return 1
+        for p in paths:
+            f2 = audit_manifest(p)
+            # annotate paths without repo context
+            findings.extend([Finding(x.code, x.severity, p, x.message) for x in f2])
+        print(_format_findings(findings))
+        return 1 if findings else 0
+
+    if args.cmd == "all":
+        repo_root = args.repo_root
+        findings.extend(lint_repo(repo_root))
+        # manifest audit
+        pat = os.path.join(os.path.abspath(repo_root), args.glob_pat)
+        for p in _glob_paths(pat):
+            findings.extend([Finding(x.code, x.severity, _relpath(p, repo_root), x.message) for x in audit_manifest(p)])
+        print(_format_findings(findings))
+        return 1 if findings else 0
+
+    print("ERROR: unknown command\n", file=sys.stderr)
+    return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
