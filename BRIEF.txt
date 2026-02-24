@@ -10,7 +10,7 @@ This document is NON-NORMATIVE.
 It does not define, modify, or extend the SLML standard.
 Normative authority exists exclusively under:
 
-  standard_released/Implementation/
+  standards_released/Implementation/
 
 This brief exists to provide institutional context, explanatory
 framing, and interpretive clarity for readers evaluating the
@@ -155,7 +155,7 @@ This brief is provided solely for explanatory purposes.
 In the event of conflict, ambiguity, or interpretive dispute,
 the normative specification under:
 
-  standard_released/Implementation/
+  standards_released/Implementation/
 
 controls exclusively.
 
