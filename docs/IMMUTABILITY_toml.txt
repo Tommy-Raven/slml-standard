@@ -133,7 +133,7 @@ specific released authority state.
 ──────────────────────────────────────────────────────────────────────────────
 The documentation directory lives inside the release root:
 
-- standards_released/v0.1_hawkseye/docs
+- standards_released/v0.1`  _hawkseye/docs
 
 /docs is explicitly non-normative.
 

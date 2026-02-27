@@ -1,0 +1,84 @@
+[schema]
+name = "SLML_SPEC_SCHEMA"
+version = "0.1"
+codename = "hawkseye"
+target = "SPEC.toml"
+strict = true
+
+[[schema.field]]
+path = "spec.name"
+type = "string"
+required = true
+enum = ["SLML"]
+
+[[schema.field]]
+path = "spec.version"
+type = "string"
+required = true
+enum = ["0.1"]
+
+[[schema.field]]
+path = "spec.codename"
+type = "string"
+required = true
+enum = ["hawkseye"]
+
+[[schema.field]]
+path = "spec.normative"
+type = "bool"
+required = true
+enum = [true]
+
+[[schema.field]]
+path = "spec.outputs.allowed_validation_states"
+type = "array<string>"
+required = true
+enum_set = ["ADMISSIBLE", "CORRUPTED"]
+
+[[schema.field]]
+path = "spec.roles.canonical"
+type = "array<string>"
+required = true
+contains_set = ["DESIGNER", "USER", "BENEFICIARY", "COMPONENT", "PRODUCT", "SYSTEM"]
+
+[[schema.field]]
+path = "spec.interop.manifest_format"
+type = "string"
+required = true
+enum = ["json"]
+
+[[schema.field]]
+path = "spec.interop.manifest_profile"
+type = "string"
+required = true
+enum = ["json-2012"]
+
+[[schema.field]]
+path = "spec.inconvenience.weights_must_normalize_to"
+type = "float"
+required = true
+enum = [1.0]
+
+[[schema.field]]
+path = "spec.admissibility_thresholds.symmetry_tolerance_ratio"
+type = "float"
+required = true
+enum = [0.15]
+
+[[schema.field]]
+path = "spec.admissibility_thresholds.corruption_ratio_hard_fail"
+type = "float"
+required = true
+enum = [1.5]
+
+[[schema.field]]
+path = "spec.user_beneficiary_alignment.users_must_equal_beneficiaries"
+type = "bool"
+required = true
+enum = [true]
+
+[[schema.field]]
+path = "spec.user_beneficiary_alignment.extra_beneficiaries_permitted"
+type = "bool"
+required = true
+enum = [false]

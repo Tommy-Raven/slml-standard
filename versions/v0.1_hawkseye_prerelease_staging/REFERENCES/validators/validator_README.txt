@@ -25,7 +25,7 @@ manifest against the invariants of a specified SLML version.
 It emits exactly one of two outcomes:
 
 - ADMISSIBLE
-- CORRUPTED (with reason codes)
+- CORRUPTED fail-first, one fail code emitted
 
 The validator:
 - does not infer missing information
@@ -34,18 +34,22 @@ The validator:
 - does not evaluate intent, legality, or quality
 - does not make claims about real-world system behavior
 
-Validator outputs are statements about manifests, not about systems.
+Validator outputs are statements about SLML-manifests, and their respective contsraint violations, not about systems, their designers or procurement .
 
 ────────────────────────────────────────
 3. VALIDATOR AUTHORITY AND LOCATION
 ────────────────────────────────────────
 
 For any given SLML version, the only authoritative validator definition
-is the one contained under:
+is the one contained within it's authoritative release branch.
 
-standard_releases/<version>/
+Each authoritative release exists on its own branch:
 
-Artifacts located under standard_releases/ are normative for that
+    release-v0.1--hawkseye
+    release-v1.0--<codename>
+    release-v2.0--<codename>
+
+Artifacts located at `release-vx.x--codename` are normative for that
 version and define the invariant evaluation surface.
 
 Any validator implementations found outside standard_releases/ are

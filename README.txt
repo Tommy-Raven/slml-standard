@@ -1,4 +1,4 @@
-SLML STANDARD MONO REPOSITORY
+﻿SLML STANDARD MONO REPOSITORY
 =============================
 
 This root branch ("main") is NON-AUTHORITATIVE and NON-NORMATIVE.
@@ -21,11 +21,11 @@ Normative authority exists EXCLUSIVELY on release branches named:
 Authority is locked to TAGGED COMMITS on those branches.
 
 A release is authoritative only when all of the following are present:
-    1. version identifier (vX.X.Y)
+    1. version identifier (vX.X)
     2. release tag
     3. commit hash
     4. release-branch name
-    5. release-metadata.toml
+    5. release_metadata.toml
     6. immutability declaration
 
 Any material outside a release branch is NON-NORMATIVE.
@@ -45,13 +45,14 @@ It may contain:
     manifests/       (examples only)
     appendix/        (historical or contextual material)
 
-It MUST NOT contain:
+It DOES NOT contain:
     normative specifications
     authoritative schemas
     authoritative validators
     authoritative governance capsules
     authoritative examples
     authoritative release artifacts
+Any document that resembles or attempts to assume an authoritative or normative status shall not be considered as such when located in the repo_root directory. 
 
 ----------------------------------------------------------------
 IMMUTABILITY MODEL
@@ -64,8 +65,8 @@ Rules:
 - No merges
 - No rebases
 - No direct pushes
-- Only append-only commits for minor version increments
-- Major changes require a new release branch
+- Only append-only commits for minor version increments such as typos or grammatical, mechanical or punctuation edits
+- Major changes require a new release branch, such as a validator script update or new manifest required json fields, or a semantic change to any canonical documents.
 
 Authority does not migrate forward implicitly.
 
@@ -90,13 +91,13 @@ Each branch contains:
 NON-NORMATIVE OVERVIEW
 ----------------------------------------------------------------
 
-SLML is a design-time structural admissibility gate.
+SLML is a binary output, design-time structural admissibility gate.
 
 It evaluates:
     - explicit ownership
     - explicit consent
-    - obligation directionality
-    - inconvenience symmetry
+    - direction of the Flow of Obligation
+    - post-system convergences of Inconvenience
 
 It does NOT evaluate:
     - intent
