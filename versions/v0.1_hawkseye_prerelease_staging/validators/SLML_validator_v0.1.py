@@ -6,16 +6,18 @@ Emits exactly: ADMISSIBLE or CORRUPTED (+ stable reason codes)
 
 Design rules:
 - No runtime overrides of normative constants
-- No inference, no defaults, no “compatibility” modes
+- No inference, no defaults, no "compatibility" modes
 - If a normative rule cannot be evaluated deterministically -> CORRUPTED
 - Single canonical inconvenience structure (hierarchical); dotted/flattened keys forbidden
 """
 
 from __future__ import annotations
 
+import json
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional, Set, Tuple, List
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 
 # ----------------------------
@@ -48,23 +50,23 @@ ALLOWED_OBLIGATION_DIRECTIONS: Set[Tuple[str, str]] = {
 # ----------------------------
 # Reason codes (stable set used in validator)
 # ----------------------------
-R000_PARSE_FAILURE = "R000_PARSE_FAILURE"
-R001_USER_BENEFICIARY_MISMATCH = "R001_USER_BENEFICIARY_MISMATCH"
-R002_OWNERSHIP_NOT_EXPLICIT = "R002_OWNERSHIP_NOT_EXPLICIT"
-R003_CONTROL_DIRECTION_INVALID = "R003_CONTROL_DIRECTION_INVALID"
-R004_CONSENT_NOT_EXPLICIT = "R004_CONSENT_NOT_EXPLICIT"
-R005_IMPLIED_CONSENT_PRESENT = "R005_IMPLIED_CONSENT_PRESENT"
-R006_RENEGOTIATION_DISABLED = "R006_RENEGOTIATION_DISABLED"
-R007_WEIGHTS_INVALID = "R007_WEIGHTS_INVALID"
-R008_BURDEN_MISSING = "R008_BURDEN_MISSING"
-R009_INCONVENIENCE_RATIO_FAIL = "R009_INCONVENIENCE_RATIO_FAIL"
-R010_SYMMETRY_TOLERANCE_FAIL = "R010_SYMMETRY_TOLERANCE_FAIL"
+R000_PARSE_FAILURE              = "R000_PARSE_FAILURE"
+R001_USER_BENEFICIARY_MISMATCH  = "R001_USER_BENEFICIARY_MISMATCH"
+R002_OWNERSHIP_NOT_EXPLICIT     = "R002_OWNERSHIP_NOT_EXPLICIT"
+R003_CONTROL_DIRECTION_INVALID  = "R003_CONTROL_DIRECTION_INVALID"
+R004_CONSENT_NOT_EXPLICIT       = "R004_CONSENT_NOT_EXPLICIT"
+R005_IMPLIED_CONSENT_PRESENT    = "R005_IMPLIED_CONSENT_PRESENT"
+R006_RENEGOTIATION_DISABLED     = "R006_RENEGOTIATION_DISABLED"
+R007_WEIGHTS_INVALID            = "R007_WEIGHTS_INVALID"
+R008_BURDEN_MISSING             = "R008_BURDEN_MISSING"
+R009_INCONVENIENCE_RATIO_FAIL   = "R009_INCONVENIENCE_RATIO_FAIL"
+R010_SYMMETRY_TOLERANCE_FAIL    = "R010_SYMMETRY_TOLERANCE_FAIL"
 R011_OBLIGATION_DIRECTION_INVALID = "R011_OBLIGATION_DIRECTION_INVALID"
-R012_CONSENT_RULES_VIOLATED = "R012_CONSENT_RULES_VIOLATED"
-R013_EXPIRY_MISSING = "R013_EXPIRY_MISSING"
-R014_USER_COERCIVE_OBLIGATION = "R014_USER_COERCIVE_OBLIGATION"
-R017_ROLE_INTEGRITY_FAIL = "R017_ROLE_INTEGRITY_FAIL"
-R018_CONSENT_EXPIRY_MISSING = "R018_CONSENT_EXPIRY_MISSING"
+R012_CONSENT_RULES_VIOLATED     = "R012_CONSENT_RULES_VIOLATED"
+R013_EXPIRY_MISSING             = "R013_EXPIRY_MISSING"
+R014_USER_COERCIVE_OBLIGATION   = "R014_USER_COERCIVE_OBLIGATION"
+R017_ROLE_INTEGRITY_FAIL        = "R017_ROLE_INTEGRITY_FAIL"
+R018_CONSENT_EXPIRY_MISSING     = "R018_CONSENT_EXPIRY_MISSING"
 
 
 # ----------------------------
@@ -72,7 +74,7 @@ R018_CONSENT_EXPIRY_MISSING = "R018_CONSENT_EXPIRY_MISSING"
 # ----------------------------
 @dataclass(frozen=True)
 class ValidationResult:
-    status: str  # "ADMISSIBLE" or "CORRUPTED"
+    status: str                          # "ADMISSIBLE" or "CORRUPTED"
     error_code: Optional[str] = None
     details: Optional[Dict[str, Any]] = None
 
@@ -173,7 +175,9 @@ class SLMLValidatorV01:
             # also forbid any key beginning with "inconvenience." even if dots were allowed
             # (redundant because "." check already blocks, kept for clarity)
 
-        required_top_level = {"entities", "system", "ownership", "consent", "inconvenience", "obligations"}
+        required_top_level = {
+            "entities", "system", "ownership", "consent", "inconvenience", "obligations"
+        }
         if not required_top_level.issubset(manifest.keys()):
             return False, R000_PARSE_FAILURE
 
@@ -198,15 +202,16 @@ class SLMLValidatorV01:
     # ----------------------------
     def _strict_schema_completeness(self, manifest: Dict[str, Any]) -> Tuple[bool, str]:
         # Required nested fields (presence, not interpretation)
-        system = manifest["system"]
+        system    = manifest["system"]
         ownership = manifest["ownership"]
-        consent = manifest["consent"]
-        inc = manifest["inconvenience"]
+        consent   = manifest["consent"]
+        inc       = manifest["inconvenience"]
 
         # system
         if "declared_user_entities" not in system or "declared_beneficiary_entities" not in system:
             return False, R000_PARSE_FAILURE
-        if not isinstance(system["declared_user_entities"], list) or not isinstance(system["declared_beneficiary_entities"], list):
+        if (not isinstance(system["declared_user_entities"], list)
+                or not isinstance(system["declared_beneficiary_entities"], list)):
             return False, R000_PARSE_FAILURE
 
         # ownership
@@ -214,7 +219,9 @@ class SLMLValidatorV01:
             return False, R000_PARSE_FAILURE
 
         # consent
-        if "consent_explicit" not in consent or "implied_consent_accepted" not in consent or "renegotiation_on_change" not in consent:
+        if ("consent_explicit" not in consent
+                or "implied_consent_accepted" not in consent
+                or "renegotiation_on_change" not in consent):
             return False, R000_PARSE_FAILURE
         if "consent_expires_at" not in consent or not consent["consent_expires_at"]:
             return False, R018_CONSENT_EXPIRY_MISSING
@@ -222,9 +229,13 @@ class SLMLValidatorV01:
         # inconvenience
         if "model" not in inc or "weights" not in inc or "expected" not in inc:
             return False, R000_PARSE_FAILURE
-        if not isinstance(inc["model"], dict) or not isinstance(inc["weights"], dict) or not isinstance(inc["expected"], list):
+        if (not isinstance(inc["model"], dict)
+                or not isinstance(inc["weights"], dict)
+                or not isinstance(inc["expected"], list)):
             return False, R000_PARSE_FAILURE
-        if "dimensions" not in inc["model"] or not isinstance(inc["model"]["dimensions"], list) or not inc["model"]["dimensions"]:
+        if ("dimensions" not in inc["model"]
+                or not isinstance(inc["model"]["dimensions"], list)
+                or not inc["model"]["dimensions"]):
             return False, R000_PARSE_FAILURE
 
         return True, ""
@@ -232,7 +243,9 @@ class SLMLValidatorV01:
     # ----------------------------
     # Step 3: Role integrity + entity index
     # ----------------------------
-    def _build_entity_index(self, manifest: Dict[str, Any]) -> Tuple[bool, str, Dict[str, str]]:
+    def _build_entity_index(
+        self, manifest: Dict[str, Any]
+    ) -> Tuple[bool, str, Dict[str, str]]:
         entities = manifest["entities"]
         entity_index: Dict[str, str] = {}
 
@@ -242,7 +255,7 @@ class SLMLValidatorV01:
             if "id" not in e or "role" not in e:
                 return False, R017_ROLE_INTEGRITY_FAIL, {}
             entity_id = e["id"]
-            role = e["role"]
+            role      = e["role"]
 
             if not isinstance(entity_id, str) or not entity_id:
                 return False, R017_ROLE_INTEGRITY_FAIL, {}
@@ -258,7 +271,9 @@ class SLMLValidatorV01:
     # ----------------------------
     # Step 3b: Referential integrity (no ghost IDs)
     # ----------------------------
-    def _strict_referential_integrity(self, manifest: Dict[str, Any], entity_index: Dict[str, str]) -> Tuple[bool, str]:
+    def _strict_referential_integrity(
+        self, manifest: Dict[str, Any], entity_index: Dict[str, str]
+    ) -> Tuple[bool, str]:
         system = manifest["system"]
 
         # Declared system entities must exist
@@ -295,9 +310,11 @@ class SLMLValidatorV01:
     # ----------------------------
     # Step 4: User–Beneficiary alignment
     # ----------------------------
-    def _verify_user_beneficiary_alignment(self, manifest: Dict[str, Any]) -> Tuple[bool, str]:
-        system = manifest["system"]
-        users = set(system["declared_user_entities"])
+    def _verify_user_beneficiary_alignment(
+        self, manifest: Dict[str, Any]
+    ) -> Tuple[bool, str]:
+        system        = manifest["system"]
+        users         = set(system["declared_user_entities"])
         beneficiaries = set(system["declared_beneficiary_entities"])
         if users != beneficiaries:
             return False, R001_USER_BENEFICIARY_MISMATCH
@@ -333,7 +350,7 @@ class SLMLValidatorV01:
     # Step 7: Inconvenience weights
     # ----------------------------
     def _verify_inconvenience_weights(self, manifest: Dict[str, Any]) -> Tuple[bool, str]:
-        inc = manifest["inconvenience"]
+        inc     = manifest["inconvenience"]
         weights = inc["weights"]
         if not isinstance(weights, dict) or not weights:
             return False, R007_WEIGHTS_INVALID
@@ -363,8 +380,8 @@ class SLMLValidatorV01:
     # Step 8: Strict inconvenience coverage
     # ----------------------------
     def _strict_inconvenience_coverage(self, manifest: Dict[str, Any]) -> Tuple[bool, str]:
-        inc = manifest["inconvenience"]
-        dims = set(inc["model"]["dimensions"])
+        inc     = manifest["inconvenience"]
+        dims    = set(inc["model"]["dimensions"])
         burdens = inc["expected"]
 
         if not burdens:
@@ -387,16 +404,18 @@ class SLMLValidatorV01:
     # ----------------------------
     # Step 9: Compute inconvenience totals
     # ----------------------------
-    def _compute_inconvenience_totals(self, manifest: Dict[str, Any]) -> Tuple[bool, str, Dict[str, float]]:
-        inc = manifest["inconvenience"]
-        dims: List[str] = inc["model"]["dimensions"]
-        weights: Dict[str, float] = inc["weights"]
+    def _compute_inconvenience_totals(
+        self, manifest: Dict[str, Any]
+    ) -> Tuple[bool, str, Dict[str, float]]:
+        inc     = manifest["inconvenience"]
+        dims: List[str]              = inc["model"]["dimensions"]
+        weights: Dict[str, float]    = inc["weights"]
         burdens: List[Dict[str, Any]] = inc["expected"]
 
         totals: Dict[str, float] = {}
         try:
             for b in burdens:
-                eid = b["entity"]
+                eid   = b["entity"]
                 total = 0.0
                 for d in dims:
                     total += float(weights[d]) * float(b[d])
@@ -409,16 +428,18 @@ class SLMLValidatorV01:
     # ----------------------------
     # Step 10: Corruption ratio
     # ----------------------------
-    def _check_corruption_ratio(self, manifest: Dict[str, Any], totals: Dict[str, float]) -> Tuple[bool, str]:
+    def _check_corruption_ratio(
+        self, manifest: Dict[str, Any], totals: Dict[str, float]
+    ) -> Tuple[bool, str]:
         entities = manifest["entities"]
         user_ids = [e["id"] for e in entities if e["role"] == "USER"]
-        ben_ids = [e["id"] for e in entities if e["role"] == "BENEFICIARY"]
+        ben_ids  = [e["id"] for e in entities if e["role"] == "BENEFICIARY"]
 
         if not user_ids or not ben_ids:
             return False, R009_INCONVENIENCE_RATIO_FAIL
 
         i_user = sum(totals.get(uid, 0.0) for uid in user_ids) / float(len(user_ids))
-        i_ben = sum(totals.get(bid, 0.0) for bid in ben_ids) / float(len(ben_ids))
+        i_ben  = sum(totals.get(bid, 0.0) for bid in ben_ids)  / float(len(ben_ids))
 
         # Strict branching: avoid divide-by-zero, avoid infinities
         if i_ben == 0.0:
@@ -434,16 +455,18 @@ class SLMLValidatorV01:
     # ----------------------------
     # Step 11: Symmetry tolerance
     # ----------------------------
-    def _check_symmetry_tolerance(self, manifest: Dict[str, Any], totals: Dict[str, float]) -> Tuple[bool, str]:
+    def _check_symmetry_tolerance(
+        self, manifest: Dict[str, Any], totals: Dict[str, float]
+    ) -> Tuple[bool, str]:
         entities = manifest["entities"]
         user_ids = [e["id"] for e in entities if e["role"] == "USER"]
-        ben_ids = [e["id"] for e in entities if e["role"] == "BENEFICIARY"]
+        ben_ids  = [e["id"] for e in entities if e["role"] == "BENEFICIARY"]
 
         if not user_ids or not ben_ids:
             return False, R010_SYMMETRY_TOLERANCE_FAIL
 
         i_user = sum(totals.get(uid, 0.0) for uid in user_ids) / float(len(user_ids))
-        i_ben = sum(totals.get(bid, 0.0) for bid in ben_ids) / float(len(ben_ids))
+        i_ben  = sum(totals.get(bid, 0.0) for bid in ben_ids)  / float(len(ben_ids))
 
         max_inc = max(i_user, i_ben)
         if max_inc == 0.0:
@@ -458,7 +481,9 @@ class SLMLValidatorV01:
     # ----------------------------
     # Step 12: Obligations enforcement
     # ----------------------------
-    def _strict_obligation_enforcement(self, manifest: Dict[str, Any], entity_index: Dict[str, str]) -> Tuple[bool, str]:
+    def _strict_obligation_enforcement(
+        self, manifest: Dict[str, Any], entity_index: Dict[str, str]
+    ) -> Tuple[bool, str]:
         consent_expires = self._parse_timestamp(manifest["consent"]["consent_expires_at"])
         if consent_expires is None:
             return False, R018_CONSENT_EXPIRY_MISSING
@@ -471,7 +496,7 @@ class SLMLValidatorV01:
             if "id" not in o or "from" not in o or "to" not in o or "type" not in o:
                 return False, R000_PARSE_FAILURE
 
-            # expiry required
+            # expiry required on every obligation
             if not o.get("expires_at"):
                 return False, R013_EXPIRY_MISSING
             o_exp = self._parse_timestamp(o["expires_at"])
@@ -479,21 +504,133 @@ class SLMLValidatorV01:
                 return False, R012_CONSENT_RULES_VIOLATED
 
             from_role = entity_index[o["from"]]
-            to_role = entity_index[o["to"]]
+            to_role   = entity_index[o["to"]]
 
             # Direction permitted
             if (from_role, to_role) not in ALLOWED_OBLIGATION_DIRECTIONS:
                 return False, R011_OBLIGATION_DIRECTION_INVALID
 
-            # Consent binding (strict)
+            # Consent binding (strict): consent-required obligations must not outlive consent
             if o.get("consent_required") is True:
-                # expiry must not exceed consent expiry
                 if o_exp > consent_expires:
                     return False, R012_CONSENT_RULES_VIOLATED
 
-            # USER coercion hard rule (strict)
+            # USER-directed obligation rules (SPEC: obligations section, all four invariants)
             if to_role == "USER":
+                # (a) type must be INFORMATIONAL_DISCLOSURE — no other type permitted
                 if o.get("type") != "INFORMATIONAL_DISCLOSURE":
                     return False, R014_USER_COERCIVE_OBLIGATION
+
+                # (b) consent_required must be explicitly False — never True or absent
+                #     (user_directed_must_not_require_consent = true)
                 if o.get("consent_required") is not False:
-            
+                    return False, R014_USER_COERCIVE_OBLIGATION
+
+                # (c) must be revocable — (user_directed_must_be_revocable = true)
+                if o.get("revocable") is not True:
+                    return False, R014_USER_COERCIVE_OBLIGATION
+
+                # (d) expiry must not exceed consent expiry regardless of consent_required
+                #     USER obligations are structurally bound by consent scope
+                if o_exp > consent_expires:
+                    return False, R012_CONSENT_RULES_VIOLATED
+
+        return True, ""
+
+    # ----------------------------
+    # Timestamp parser
+    # Accepts ISO 8601 strings with or without timezone offset.
+    # Returns a timezone-aware datetime or None if unparseable.
+    # None is treated as CORRUPTED by callers — no inference permitted.
+    # ----------------------------
+    @staticmethod
+    def _parse_timestamp(value: Any) -> Optional[datetime]:
+        if not isinstance(value, str) or not value:
+            return None
+
+        # Normalise the common case: trailing 'Z' -> '+00:00'
+        normalised = value.strip()
+        if normalised.endswith("Z"):
+            normalised = normalised[:-1] + "+00:00"
+
+        # Try the full ISO 8601 with offset first (most common in manifests)
+        formats = [
+            "%Y-%m-%dT%H:%M:%S%z",   # 2026-12-31T23:59:59+00:00
+            "%Y-%m-%dT%H:%M:%S.%f%z", # with microseconds
+            "%Y-%m-%dT%H:%M%z",       # without seconds
+        ]
+        for fmt in formats:
+            try:
+                dt = datetime.strptime(normalised, fmt)
+                # Ensure timezone-aware; reject naive datetimes
+                if dt.tzinfo is None:
+                    return None
+                return dt
+            except ValueError:
+                continue
+
+        # fromisoformat covers Python 3.7+ edge cases not caught above
+        try:
+            dt = datetime.fromisoformat(normalised)
+            if dt.tzinfo is None:
+                return None
+            return dt
+        except ValueError:
+            return None
+
+
+# ----------------------------
+# CLI entry point
+# Usage:
+#   python SLML_validator_v0.1.py <manifest.json>
+#
+# Exit codes:
+#   0 — ADMISSIBLE
+#   1 — CORRUPTED
+#   2 — invocation error (missing argument, unreadable file, JSON parse failure)
+#
+# Output (stdout):
+#   ADMISSIBLE
+#   or
+#   CORRUPTED <error_code>
+#
+# The validator never writes to stderr except for invocation errors.
+# No colour, no formatting, no suggestions — output is machine-readable.
+# ----------------------------
+def _cli() -> None:
+    if len(sys.argv) != 2:
+        print(
+            "usage: SLML_validator_v0.1.py <manifest.json>",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+
+    manifest_path = sys.argv[1]
+
+    try:
+        with open(manifest_path, "r", encoding="utf-8") as fh:
+            raw = fh.read()
+    except OSError as exc:
+        print(f"error: cannot read manifest: {exc}", file=sys.stderr)
+        sys.exit(2)
+
+    try:
+        manifest = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        # JSON parse failure is a structural failure — emit CORRUPTED, not an invocation error
+        print(f"CORRUPTED {R000_PARSE_FAILURE}")
+        sys.exit(1)
+
+    result = SLMLValidatorV01().validate(manifest)
+
+    if result.status == "ADMISSIBLE":
+        print("ADMISSIBLE")
+        sys.exit(0)
+    else:
+        code = result.error_code or R000_PARSE_FAILURE
+        print(f"CORRUPTED {code}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    _cli()
