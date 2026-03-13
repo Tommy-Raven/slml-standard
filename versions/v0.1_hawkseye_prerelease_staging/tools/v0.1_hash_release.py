@@ -1,31 +1,29 @@
-!/usr/bin/env python3
-
+#!/usr/bin/env python3
+##
 ## tools/hash_release.py
 ##
 ## SLML Release Hasher (v0.1.1)
 ##
-## Generates a deterministic SHA-256 manifest for any normative release branch with the following title format:
-##    release-v.x.x--<codename>
+## Generates a deterministic SHA-256 manifest for a normative release branch.
+## Branch naming convention: release-v<X.Y>--<codename>
+## e.g. release-v0.1--hawkseye
 ##
-##Primary goals:
-##- Determinism: stable ordering, stable path formatting
-##- Narrow scope: hashes only normative artifacts under the branch [release-v0.1--hawkseye]
-##- Auditability: writes an immutable hash list into the version directory
-##- Verifiability: supports verifying an existing hash list
+## Primary goals:
+##   - Determinism: stable ordering, stable path formatting
+##   - Narrow scope: hashes only normative .toml artifacts under the checked-out
+##     release branch directory
+##   - Auditability: writes an immutable hash list (HASHES.sha256) into the
+##     target directory
+##   - Verifiability: supports verifying an existing HASHES.sha256
 ##
-##Default output:
-####   # standards/vX.Y/HASHES.sha256 (deprecated) use official release--branch method, ie,
-##        release-v0.1--hawkseye
-##        "release-vx.x--<codename>"
+## Output file: HASHES.sha256
+## Format per line:
+##   <sha256_hex>  <posix-relative-path>
 ##
-##Format:
-##    <sha256>  <posix-relative-path> (deprecated) use official release--branch method, ie,
-##        release-v0.1--hawkseye
-##        "release-vx.x--<codename>"
-##
-##Notes:
-##- This tool intentionally avoids content transformations. Hashes are over raw bytes.
-##- This tool intentionally avoids following symlinks (to prevent filesystem-dependent results).
+## Notes:
+##   - Hashes are over raw bytes; no content transformation is applied.
+##   - Symlinks are refused (non-deterministic across environments).
+##   - The HASHES.sha256 file itself is excluded from its own hash scope.
 ##
 
 from __future__ import annotations
@@ -37,12 +35,14 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, List, Tuple
 
 
 HASH_FILENAME = "HASHES.sha256"
 
-@version(frozen=True)
+# Branch naming convention for normative SLML releases
+BRANCH_PREFIX = "release-v"
+
 
 @dataclass(frozen=True)
 class FileHash:
@@ -68,7 +68,6 @@ def _git_is_repo() -> bool:
 
 
 def _git_is_clean() -> bool:
-    # Porcelain output empty => clean
     out = _run_git(["status", "--porcelain"])
     return out == ""
 
@@ -82,62 +81,57 @@ def _sha256_file(path: Path) -> str:
 
 
 def _posix_relpath(path: Path, base: Path) -> str:
-    rel = path.relative_to(base)
-    # Normalize to POSIX separators for cross-platform determinism
-    return rel.as_posix()
+    return path.relative_to(base).as_posix()
 
 
-def _iter_files(base_dir: Path, exclude_rel_posix: set[str]) -> Iterable[Path]:
-    # Deterministic traversal: collect, sort by posix relative path
+def _iter_files(base_dir: Path, exclude_rel_posix: set) -> Iterable[Path]:
     files: List[Path] = []
     for root, dirs, filenames in os.walk(base_dir, followlinks=False):
-        # Deterministic dir order
         dirs.sort()
         filenames.sort()
         root_path = Path(root)
         for name in filenames:
             p = root_path / name
             if p.is_symlink():
-                # Refuse symlinks: non-deterministic across environments
                 _die(f"ERROR: Symlink not allowed in normative surface: {p}", 2)
             rel_posix = _posix_relpath(p, base_dir)
             if rel_posix in exclude_rel_posix:
                 continue
             files.append(p)
-
     files.sort(key=lambda p: _posix_relpath(p, base_dir))
     return files
 
 
-def _compute_hashes(version_dir: Path) -> List[FileHash]:
+def _compute_hashes(release_dir: Path) -> List[FileHash]:
+    # Hash only .toml files per IMMUTABILITY.toml [file_classes.authoritative_only]
     exclude = {HASH_FILENAME}
     out: List[FileHash] = []
-    for p in _iter_files(version_dir, exclude_rel_posix=exclude):
-        rel_posix = _posix_relpath(p, version_dir)
+    for p in _iter_files(release_dir, exclude_rel_posix=exclude):
+        if p.suffix.lower() != ".toml":
+            continue
+        rel_posix = _posix_relpath(p, release_dir)
         out.append(FileHash(rel_posix_path=rel_posix, sha256_hex=_sha256_file(p)))
     return out
 
 
-def _write_hash_file(version_dir: Path, hashes: List[FileHash]) -> Path:
-    out_path = version_dir / HASH_FILENAME
-    # Ensure deterministic file contents (LF newlines)
+def _write_hash_file(release_dir: Path, hashes: List[FileHash]) -> Path:
+    out_path = release_dir / HASH_FILENAME
     lines = [f"{h.sha256_hex}  {h.rel_posix_path}" for h in hashes]
     content = "\n".join(lines) + "\n"
     out_path.write_text(content, encoding="utf-8", newline="\n")
     return out_path
 
 
-def _read_hash_file(version_dir: Path) -> List[FileHash]:
-    p = version_dir / HASH_FILENAME
+def _read_hash_file(release_dir: Path) -> List[FileHash]:
+    p = release_dir / HASH_FILENAME
     if not p.exists():
-        _die(f"ERROR: Missing {HASH_FILENAME} in {version_dir}", 2)
+        _die(f"ERROR: Missing {HASH_FILENAME} in {release_dir}", 2)
 
     hashes: List[FileHash] = []
     for i, line in enumerate(p.read_text(encoding="utf-8").splitlines(), start=1):
         line = line.strip()
         if not line:
             continue
-        # Format: "<hex>  <path>"
         parts = line.split("  ", 1)
         if len(parts) != 2:
             _die(f"ERROR: Invalid hash line {i} in {p}: {line}", 2)
@@ -150,23 +144,18 @@ def _read_hash_file(version_dir: Path) -> List[FileHash]:
     return hashes
 
 
-def _verify_hashes(version_dir: Path) -> Tuple[bool, List[str]]:
-    expected = _read_hash_file(version_dir)
+def _verify_hashes(release_dir: Path) -> Tuple[bool, List[str]]:
+    expected = _read_hash_file(release_dir)
     expected_map = {h.rel_posix_path: h.sha256_hex for h in expected}
 
-    # Compute current
-    computed = _compute_hashes(version_dir)
+    computed = _compute_hashes(release_dir)
     computed_map = {h.rel_posix_path: h.sha256_hex for h in computed}
 
     errors: List[str] = []
-
-    # Missing or extra files
     for path in sorted(set(expected_map.keys()) - set(computed_map.keys())):
         errors.append(f"MISSING: {path}")
     for path in sorted(set(computed_map.keys()) - set(expected_map.keys())):
         errors.append(f"EXTRA: {path}")
-
-    # Mismatched hashes
     for path in sorted(set(expected_map.keys()) & set(computed_map.keys())):
         if expected_map[path] != computed_map[path]:
             errors.append(f"MISMATCH: {path}")
@@ -174,24 +163,58 @@ def _verify_hashes(version_dir: Path) -> Tuple[bool, List[str]]:
     return (len(errors) == 0), errors
 
 
-def _resolve_version_dir(root: Path, version: str) -> Path:
-    # Accept "0.1" or "v0.1"
-    v = version.strip()
-    if v.startswith("v"):
-        v = v[1:]
-    version_dir = root / "standards" / f"v{v}"
-    if not version_dir.exists() or not version_dir.is_dir():
-        _die(f"ERROR: Version directory not found: {version_dir}", 2)
-    return version_dir
+def _resolve_release_dir(repo_root: Path, branch: str) -> Path:
+    """
+    Resolve the local directory corresponding to the given release branch.
+
+    Convention: the branch is checked out or worktree'd under the repo root.
+    If the branch is currently checked out, use repo_root directly.
+    If a worktree exists at <repo_root>/<branch>, use that.
+    Otherwise fail.
+
+    Branch format: release-v<X.Y>--<codename>
+    """
+    branch = branch.strip()
+
+    # Validate branch name format
+    if not branch.startswith(BRANCH_PREFIX):
+        _die(
+            f"ERROR: Branch must start with '{BRANCH_PREFIX}', got: {branch}\n"
+            f"       Example: release-v0.1--hawkseye",
+            2,
+        )
+
+    # Check if it's the currently checked-out branch
+    if _git_is_repo():
+        try:
+            current = _run_git(["rev-parse", "--abbrev-ref", "HEAD"])
+            if current == branch:
+                return repo_root
+        except Exception:
+            pass
+
+    # Check for a worktree at <repo_root>/<branch>
+    worktree_path = repo_root / branch
+    if worktree_path.exists() and worktree_path.is_dir():
+        return worktree_path
+
+    _die(
+        f"ERROR: Cannot locate release branch directory for: {branch}\n"
+        f"       Either check out the branch or create a worktree at: {worktree_path}",
+        2,
+    )
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(
-        description="Generate or verify deterministic SHA-256 hashes for standards/vX.Y/."
+        description=(
+            "Generate or verify deterministic SHA-256 hashes for a normative "
+            "SLML release branch. Branch format: release-v<X.Y>--<codename>"
+        )
     )
     ap.add_argument(
-        "version",
-        help='Version like "0.1" or "v0.1" (targets standards/v0.1/)',
+        "branch",
+        help='Release branch name, e.g. "release-v0.1--hawkseye"',
     )
     ap.add_argument(
         "--verify",
@@ -201,37 +224,41 @@ def main() -> int:
     ap.add_argument(
         "--allow-dirty",
         action="store_true",
-        help="Allow running even if git working tree is dirty (not recommended).",
+        help="Allow running with a dirty git working tree (not recommended for release).",
     )
     args = ap.parse_args()
 
     repo_root = Path.cwd()
 
-    # Git hygiene (recommended for immutable releases)
     if _git_is_repo():
         if not args.allow_dirty and not _git_is_clean():
-            _die("ERROR: Git working tree is dirty. Commit or stash changes, or pass --allow-dirty.", 2)
+            _die(
+                "ERROR: Git working tree is dirty. "
+                "Commit or stash changes, or pass --allow-dirty.",
+                2,
+            )
     else:
-        # Still allow usage outside git, but warn (determinism still holds)
         if not args.allow_dirty:
-            print("WARNING: Not a git repository. Proceeding without clean-tree enforcement.", file=sys.stderr)
+            print(
+                "WARNING: Not a git repository. "
+                "Proceeding without clean-tree enforcement.",
+                file=sys.stderr,
+            )
 
-    version_dir = _resolve_version_dir(repo_root, args.version)
+    release_dir = _resolve_release_dir(repo_root, args.branch)
 
     if args.verify:
-        ok, errors = _verify_hashes(version_dir)
+        ok, errors = _verify_hashes(release_dir)
         if ok:
-            print("ADMISSIBLE")  # verification success for the normative surface
+            print("ADMISSIBLE")
             return 0
-        print("CORRUPTED R000_PARSE_FAILURE")
+        print("CORRUPTED")
         for e in errors:
-            print(f"- {e}")
+            print(f"  {e}", file=sys.stderr)
         return 1
 
-    hashes = _compute_hashes(version_dir)
-    out_path = _write_hash_file(version_dir, hashes)
-
-    # Print minimal machine-friendly output
+    hashes = _compute_hashes(release_dir)
+    out_path = _write_hash_file(release_dir, hashes)
     print(out_path.as_posix())
     return 0
 
