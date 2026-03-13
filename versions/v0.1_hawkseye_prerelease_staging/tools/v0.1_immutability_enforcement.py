@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-immutability_enforcement.py
+v0.1_immutability_enforcement.py
 
 Fails if files under standards/vX.Y/ have been modified after a release tag.
 
