@@ -1,21 +1,27 @@
 [hash_policy]
 algorithm = "sha256"
-release_dir = "standard_releases/hawkseye_v0.1"
+release_dir = "branch:release-v0.1--hawkseye"
 
 [hash_policy.required_files]
 authoritative_toml = [
-  "VERSION.toml",
-  "NOTICE.toml",
-  "SPEC.toml",
+  "CHANGELOG.toml",
   "ERROR_CODES.toml",
   "GLOSSARY.toml",
-  "NORMATIVE_EXAMPLES.toml",
+  "GOVERNANCE.toml",
+  "HASH_POLICY.toml",
+  "IMMUTABILITY.toml",
+  "LICENSE_CODE.toml",
+  "LICENSE_SPEC.toml",
   "NON_COMPLIANT_PATTERNS.toml",
+  "NORMATIVE_EXAMPLES.toml",
+  "NOTICE.toml",
+  "RELEASE_METADATA.toml",
+  "SPEC.toml",
   "SPEC_SCHEMA.toml",
-  "IMMUTABILITY.toml"
+  "VERSION.toml"
 ]
 
 [hash_policy.claim_binding]
 binded_manifest_path = "BINDING/SLML_01_binded_manifest.json"
-claims_text_path = "BINDING/CLAIMS/SLML_01_claims.txt"
-evidence_raw_path = "BINDING/EVIDENCE/SLML_01_docs.RAW"
+claims_text_path      = "BINDING/CLAIMS/SLML_01_claims.txt"
+evidence_raw_path     = "BINDING/EVIDENCE/SLML_01_docs.RAW"
