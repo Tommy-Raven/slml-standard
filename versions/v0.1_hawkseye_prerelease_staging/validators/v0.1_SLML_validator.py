@@ -600,7 +600,7 @@ class SLMLValidatorV01:
 def _cli() -> None:
     if len(sys.argv) != 2:
         print(
-            "usage: SLML_validator_v0.1.py <manifest.json>",
+            "usage: v0.1_SLML_validator.py <manifest.json>",
             file=sys.stderr,
         )
         sys.exit(2)
