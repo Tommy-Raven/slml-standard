@@ -1,6 +1,6 @@
 [meta]
 standard_name = "SLML"
-artifact = "release_metadata.toml"
+artifact = "RELEASE_METADATA.toml"
 governance_version = "1.0"
 metadata_schema_version = "1.0"
 status = "NORMATIVE"
@@ -57,14 +57,15 @@ required_normative_artifacts = [
   "NORMATIVE_EXAMPLES.toml",
   "NON_COMPLIANT_PATTERNS.toml",
   "HASH_POLICY.toml",
-  "immutability.toml",
+  "IMMUTABILITY.toml",
   "NOTICE.toml",
-  "release_metadata.toml",
+  "RELEASE_METADATA.toml",
   "LICENSE_CODE.toml",
   "LICENSE_SPEC.toml",
   "GOVERNANCE.toml",
   "CHANGELOG.toml",
-  "SLML_validator_v0.1.py"
+  "NOMENCLATURE.toml",
+  "v0.1_SLML_validator.py"
 ]
 
 [signatures]
