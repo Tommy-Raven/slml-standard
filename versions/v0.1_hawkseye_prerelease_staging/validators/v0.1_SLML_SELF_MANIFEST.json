@@ -59,12 +59,12 @@
     "VERSION_LOCK_RISK":   0.05
   }
 ]
-
+  },
   "obligations": [
     {
       "id":               "obl.informational_disclosure",
       "from":             "artifact.slml_standard",
-      "to":               "org.slml_adopter",
+      "to":               "org.slml_adopter.as_user",
       "type":             "INFORMATIONAL_DISCLOSURE",
       "scope": [
         "validation_rules",
