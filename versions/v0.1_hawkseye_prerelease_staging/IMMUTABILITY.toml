@@ -83,17 +83,27 @@ draft_hash_reference_required_fields = [
 draft_hash_visibility_location = "HEADER_BLOCK"
 
 [docs]
-docs_root = "branch:release-v0.1--hawkseye/docs"
-docs_are_non_normative = true
-docs_are_verbose_human_facing = true
+docs_root                                    = "branch:release-v0.1--hawkseye/docs"
+docs_are_non_normative                       = true
+docs_are_verbose_human_facing                = true
 docs_must_have_exactly_one_mirror_per_authoritative_file = true
 docs_mirror_must_not_create_new_normative_rules = true
-docs_mirror_naming_convention = "SAME_BASENAME_TXT"
-docs_mirror_invariant_checks = [
+docs_mirror_naming_convention                = "SAME_BASENAME_TXT"
+docs_mirror_invariant_checks                 = [
   "cardinality_match",
   "basename_correspondence",
   "no_orphan_docs",
   "no_undocumented_authority"
+]
+standalone_informative_docs_permitted        = true
+standalone_informative_docs_class            = "no_toml_counterpart_required"
+standalone_informative_docs_examples         = [
+  "COMPLIANCE.txt",
+  "COMPLIANCE_CLAIM_POLICY.txt",
+  "EXECUTIVE_COMPLIANCE.txt",
+  "FAQ.txt",
+  "OVERVIEW.txt",
+  "WORKED_EXAMPLE_LYRIC_WORKFLOW.txt"
 ]
 
 [hashing]
