@@ -1,0 +1,17 @@
+[meta]
+artifact            = "CHANGELOG.toml"
+standard_name       = "SLML"
+standard_version    = "v0.1"
+standard_codename   = "hawkseye"
+status              = "NORMATIVE"
+
+[changelog]
+initial_release     = true
+
+[changelog.v0_1]
+version             = "v0.1"
+codename            = "hawkseye"
+status              = "prerelease"
+summary             = "Initial release of SLML. Establishes binary legitimacy gate, 4-axis evaluation model, 12-step validator pipeline, R000–R018 error codes, branch-based authority model."
+breaking_changes    = "N/A — initial release"
+prior_version       = "none"

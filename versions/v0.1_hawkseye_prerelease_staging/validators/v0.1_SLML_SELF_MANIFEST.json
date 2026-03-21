@@ -1,0 +1,80 @@
+{
+  "standard_reference": "SLML/0.1(hawkseye)",
+  "standard_hash": "sha256:<TO_BE_SET_AT_FREEZE>",
+  "manifest_canonical_hash": "sha256:<TO_BE_SET_AT_FREEZE>",
+
+  "entities": [
+  { "id": "person.tommy_raven",              "role": "DESIGNER"    },
+  { "id": "system.slml_system",              "role": "SYSTEM"      },
+  { "id": "artifact.slml_standard",          "role": "PRODUCT"     },
+  { "id": "org.slml_adopter.as_user",        "role": "USER"        },
+  { "id": "org.slml_adopter.as_beneficiary", "role": "BENEFICIARY" }
+],
+
+"system": {
+  "declared_user_entities":        ["org.slml_adopter.as_user", "org.slml_adopter.as_beneficiary"],
+  "declared_beneficiary_entities": ["org.slml_adopter.as_user", "org.slml_adopter.as_beneficiary"]
+},
+
+  "ownership": {
+    "ownership_explicit":  true,
+    "control_direction":   "DESIGNER_TO_USER"
+  },
+
+  "consent": {
+    "consent_explicit":         true,
+    "implied_consent_accepted": false,
+    "renegotiation_on_change":  true,
+    "consent_expires_at":       "2027-12-31T23:59:59+00:00"
+  },
+
+  "inconvenience": {
+    "model": {
+      "dimensions": [
+        "ADOPTION_EFFORT",
+        "SCHEMA_RIGIDITY",
+        "VALIDATION_OVERHEAD",
+        "VERSION_LOCK_RISK"
+      ]
+    },
+    "weights": {
+      "ADOPTION_EFFORT":      0.25,
+      "SCHEMA_RIGIDITY":      0.25,
+      "VALIDATION_OVERHEAD":  0.25,
+      "VERSION_LOCK_RISK":    0.25
+    },
+    "expected": [
+  {
+    "entity":              "org.slml_adopter.as_user",
+    "ADOPTION_EFFORT":     0.10,
+    "SCHEMA_RIGIDITY":     0.10,
+    "VALIDATION_OVERHEAD": 0.05,
+    "VERSION_LOCK_RISK":   0.05
+  },
+  {
+    "entity":              "org.slml_adopter.as_beneficiary",
+    "ADOPTION_EFFORT":     0.10,
+    "SCHEMA_RIGIDITY":     0.10,
+    "VALIDATION_OVERHEAD": 0.05,
+    "VERSION_LOCK_RISK":   0.05
+  }
+]
+  },
+  "obligations": [
+    {
+      "id":               "obl.informational_disclosure",
+      "from":             "artifact.slml_standard",
+      "to":               "org.slml_adopter.as_user",
+      "type":             "INFORMATIONAL_DISCLOSURE",
+      "scope": [
+        "validation_rules",
+        "error_codes",
+        "release_immutability_policy",
+        "version_changelog"
+      ],
+      "consent_required": false,
+      "revocable":        true,
+      "expires_at":       "2027-12-31T23:59:59+00:00"
+    }
+  ]
+}

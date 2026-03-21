@@ -1,0 +1,90 @@
+[slml_governance]
+version = "v0.1"
+codename = "hawkseye"
+status = "frozen"
+release_case = "lowercase"
+codename_no_spaces = true
+immutability = true
+append_only = true
+
+[repository_structure]
+root_authority = "non_authoritative"
+normative_authority_path = "branch:release-v<version>--<codename>"
+governance_file = "GOVERNANCE.toml"
+self_manifest_required = true
+
+[governance]
+purpose = "Preserve immutable standard releases and prevent semantic drift"
+
+[governance.immutability]
+released_versions_immutable = true
+modifiable_paths_after_release = []
+forbidden_modifications = [
+    "branch:release-vX.Y--*/**"
+]
+
+[governance.authority]
+normative_authority_path = "branch:release-v<version>--<codename>"
+external_interpretive_authority = false
+documentation_authoritative = false
+semantic_authority_centralized = true
+semantic_authority_location = "normative_text_only"
+
+[governance.version_creation]
+required_files = [
+    "IMMUTABILITY.toml",
+    "SPEC.toml",
+    "SELF_MANIFEST.toml"
+]
+self_manifest_validation_required = true
+release_blocked_without_validation = true
+new_version_required_for_semantic_change = true
+no_in_place_revision = true
+
+[governance.contributions.allowed]
+new_versions = true
+non_normative_tooling = true
+documentation_updates = true
+additional_validators = true
+
+[governance.contributions.forbidden]
+modify_released_artifacts = true
+semantic_clarifications_without_new_version = true
+validator_inference_or_defaults = true
+retroactive_semantic_adjustment = true
+
+[governance.disputes]
+resolution_order = [
+    "normative_text",
+    "self_manifest_validation_behavior"
+]
+ambiguity_resolution_method = "new_version_only"
+interpretation_freeze_on_release = true
+
+[governance.release_process]
+hash_generation_required = true
+hash_tool = "tools/hash_release.py"
+hash_output_file = "HASHES.sha256"
+git_tag_required = true
+tag_format = "slml-vX.Y"
+github_release_recommended = true
+release_hashes_must_match_tag = true
+release_blocked_on_hash_mismatch = true
+
+[governance.maintainers]
+operational_control_only = true
+semantic_authority = false
+cannot_override_normative_text = true
+
+[compliance]
+validator_must_enforce_governance = true
+validator_must_fail_on_immutability_violation = true
+validator_must_not_assume_defaults = true
+recursive_validation_required = true
+cross_version_isolation_required = true
+
+[immutability_guarantees]
+released_versions_locked = true
+hash_sealed = true
+append_only_history = true
+no_rewrite_of_git_history = true

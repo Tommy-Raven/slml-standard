@@ -1,0 +1,58 @@
+[spec]
+name = "SLML"
+version = "0.1"
+codename = "hawkseye"
+normative = true
+
+[spec.outputs]
+allowed_validation_states = ["ADMISSIBLE", "CORRUPTED"]
+
+[spec.roles]
+canonical = ["DESIGNER", "USER", "BENEFICIARY", "COMPONENT", "PRODUCT", "SYSTEM"]
+one_role_per_entity = true
+entity_id_unique = true
+
+[spec.interop]
+manifest_format = "json"
+manifest_profile = "json-2012"
+schema_format = "json"
+schema_profile = "json-2012"
+manifest_must_be_machine_ingestible = true
+
+[spec.traceability]
+required_for_accurate_compliance_claim = ["standard_reference", "standard_hash", "manifest_canonical_hash"]
+evidence_bundle_recommended = true
+
+[spec.ownership]
+ownership_explicit_required = true
+control_direction_required = true
+control_direction_allowed = ["DESIGNER_TO_USER"]
+
+[spec.consent]
+consent_explicit_required = true
+implied_consent_accepted_allowed = [false]
+renegotiation_on_change_required = true
+consent_expires_at_required = true
+
+[spec.inconvenience]
+declaration_required = true
+weights_must_normalize_to = 1.0
+weights_non_negative_required = true
+dimensions_required = true
+expected_burdens_required = true
+
+[spec.admissibility_thresholds]
+symmetry_tolerance_ratio = 0.15
+corruption_ratio_hard_fail = 1.5
+
+[spec.user_beneficiary_alignment]
+users_must_equal_beneficiaries = true
+extra_beneficiaries_permitted = false
+undeclared_beneficiaries_permitted = false
+
+[spec.obligations]
+user_directed_types_allowed = ["INFORMATIONAL_DISCLOSURE"]
+user_directed_must_be_revocable = true
+user_directed_must_not_require_consent = true
+user_directed_must_have_expiry = true
+coercive_user_obligations_prohibited = true

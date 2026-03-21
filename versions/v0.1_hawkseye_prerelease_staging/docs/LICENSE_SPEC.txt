@@ -1,0 +1,76 @@
+LICENSE_SPEC
+
+This document mirrors LICENSE_SPEC.toml.
+It is informative only. The authoritative license is LICENSE_SPEC.toml.
+
+------------------------------------------------------------
+
+The SLML normative specification text, normative examples, and governance
+modules are licensed under the Creative Commons Attribution 4.0
+International License (CC-BY-4.0).
+
+This license permits worldwide, royalty-free, irrevocable reuse,
+redistribution, and adaptation of the specification text, provided
+appropriate credit is given.
+
+Attribution does not constitute certification, endorsement, validation,
+or compliance approval.
+
+Moral rights, patent rights, and trademark rights are not licensed.
+
+No warranty is provided. Use is at your own risk.
+
+Canonical license URL: https://creativecommons.org/licenses/by/4.0/
+
+
+```toml
+[license]
+name = "Creative Commons Attribution 4.0 International"
+identifier = "CC-BY-4.0"
+modifiable = false
+
+[license.scope]
+applies_to = [
+  "normative_specification_text",
+  "normative_examples",
+  "governance_modules"
+]
+
+[license.grant]
+worldwide = true
+royalty_free = true
+non_sublicensable = true
+non_exclusive = true
+irrevocable = true
+
+[license.rights]
+copyright = true
+similar_rights = true
+sui_generis_database_rights = true
+
+[license.conditions]
+attribution_required = true
+modification_disclosure_required = true
+license_reference_required = true
+
+[license.exclusions]
+moral_rights_licensed = false
+patent_rights_licensed = false
+trademark_rights_licensed = false
+
+[license.disclaimer]
+warranty_provided = false
+liability_limited = true
+
+[license.term]
+duration = "copyright_term"
+
+[license.interpretation]
+endorsement_permitted = false
+certification_permitted = false
+compliance_claim_permitted = false
+
+[license.reference]
+canonical_url = "https://creativecommons.org/licenses/by/4.0/"
+
+```

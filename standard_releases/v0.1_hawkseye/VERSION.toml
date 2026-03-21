@@ -1,8 +1,0 @@
-[standard]
-name = "Structural Legitimacy Manifest Language"
-short_name = "SLML"
-version = "0.1"
-codename = "hawkseye"
-status = "released"
-release_series = "hawkseye_v0.1"
-canonical_release_dir = "standard_releases/hawkseye_v0.1"
