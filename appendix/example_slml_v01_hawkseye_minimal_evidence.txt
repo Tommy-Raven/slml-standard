@@ -1,0 +1,202 @@
+NON-NORMATIVE — EVIDENCE POINTERS AND REGISTRY
+Example: example_slml_v01_hawkseye_minimal_manifest.json
+Target standard: SLML v0.1 (hawkseye)
+
+────────────────────────────────────────────
+EVIDENCE SCOPE AND LIMITS (REQUIRED CONTEXT)
+────────────────────────────────────────────
+
+These evidence pointers explain how to demonstrate that the manifest’s claims are:
+
+- evaluable by the canonical SLML validator
+- reproducible against exact versioned artifacts
+- auditable under SLML’s structural invariants
+
+They do NOT, by themselves, prove the real-world behavioral truth of a system.
+
+Instead, they prove that:
+- claims are formally stated
+- claims are falsifiable
+- claims are auditable by SLML
+- claims are backed by real-world data sources and well-known or documented facts
+  that can be independently consulted
+
+SLML evaluates the structure and legitimacy of claims, not their ultimate empirical
+truth. Empirical truth is supported through referenced evidence, not asserted by
+the validator.
+
+────────────────────────────────────────────
+WHAT COUNTS AS ADMISSIBLE EVIDENCE (v0.1)
+────────────────────────────────────────────
+
+For SLML v0.1 (hawkseye), admissible evidence consists of:
+
+1) Stable, versioned artifacts that allow independent reproduction of validation
+2) Referential documentation that substantiates the plausibility of claims
+3) Publicly accessible or verifiable sources that ground claims in known facts
+4) Clear linkage between claims and evidence (no orphaned assertions)
+
+Evidence may be documentary, technical, or referential.
+Evidence does not need to be exhaustive; it must be traceable.
+
+────────────────────────────────────────────
+EVIDENCE POINTERS BY CLAIM GROUP
+────────────────────────────────────────────
+
+A) Reproducibility and Traceability
+
+Evidence pointers:
+- Canonical file path:
+  example_slml_v01_hawkseye_minimal_manifest.json
+- Declared standard:
+  SLML v0.1 (hawkseye)
+- Validator reference:
+  SLML canonical validator v0.1 (hawkseye)
+- Hash placeholders:
+  - manifest sha256: sha256:TBD_MANIFEST_HASH
+  - validator sha256: sha256:TBD_VALIDATOR_HASH
+
+Rationale:
+These artifacts allow any third party to independently reproduce the validation
+result for this manifest against the same standard version.
+
+────────────────────────────────────────────
+
+B) Role Integrity and Referential Closure
+
+Evidence pointers:
+- entities[] section of the manifest
+- validator role-integrity checks (unique IDs, canonical roles)
+- absence of undeclared or dangling entity references
+
+Rationale:
+Role integrity and referential closure are proven mechanically by validation.
+No external evidence is required beyond the manifest and validator output.
+
+────────────────────────────────────────────
+
+C) User–Beneficiary Alignment
+
+Evidence pointers:
+- system.declared_user_entities
+- system.declared_beneficiary_entities
+
+Rationale:
+In hawkseye, user–beneficiary alignment is a structural claim.
+Its admissibility is determined entirely by manifest structure.
+
+────────────────────────────────────────────
+
+D) Consent Invariants
+
+Evidence pointers:
+- consent.consent_explicit = true
+- consent.implied_consent_accepted = false
+- consent.renegotiation_on_change = true
+- consent.consent_expires_at present and bounded
+
+Supporting real-world documentation:
+- Public consent policy documents
+- Terms of service sections describing consent scope and expiration
+- Change-notification or renegotiation procedures
+
+Rationale:
+SLML verifies that consent is *claimed* to be explicit, bounded, and renegotiable.
+External documentation supports the plausibility and grounding of that claim.
+
+────────────────────────────────────────────
+
+E) Inconvenience Model Validity
+
+Evidence pointers:
+- inconvenience.model.dimensions
+- inconvenience.weights (normalized to 1.0)
+- inconvenience.expected entries with full dimension coverage
+
+Supporting real-world documentation:
+- User documentation describing time cost, removal procedures, behavior clarity,
+  and privacy practices
+- Published UX or privacy notices corresponding to declared dimensions
+
+Rationale:
+The validator checks internal consistency.
+External documentation grounds the declared inconvenience levels in known facts.
+
+────────────────────────────────────────────
+
+F) Obligations Constraints
+
+Evidence pointers:
+- obligations[] entries
+- obligation direction (PRODUCT → USER)
+- obligation type = INFORMATIONAL_DISCLOSURE
+- revocable = true
+- consent_required = false
+- expires_at present
+
+Supporting real-world documentation:
+- User-facing disclosure notices
+- Update or change-log documentation
+- Data-handling disclosures
+
+Rationale:
+The validator enforces obligation structure.
+External documentation demonstrates that such disclosures exist and are not fictional.
+
+────────────────────────────────────────────
+EVIDENCE REGISTRY (REFERENTIAL, VERIFIABLE)
+────────────────────────────────────────────
+
+The following registry enumerates concrete evidence references supporting the
+claims made in this example. These entries are illustrative and must be replaced
+with real references in real manifests.
+
+Registry format:
+ID | Evidence Type | Description | Location / Reference | Verifiability
+
+E-001
+Type: Artifact
+Description: SLML v0.1 (hawkseye) canonical specification
+Location: standards_released/v0.1_hawkseye/SPEC.toml
+Verifiability: Hash-verifiable, repository-stable
+
+E-002
+Type: Artifact
+Description: SLML v0.1 canonical validator
+Location: tools/SLML_validator_v01.py (or release artifact)
+Verifiability: Hash-verifiable, executable
+
+E-003
+Type: Documentation
+Description: Public consent and disclosure policy
+Location: https://example.org/consent-policy
+Verifiability: Public, date-stamped
+
+E-004
+Type: Documentation
+Description: User documentation describing removal and behavior
+Location: https://example.org/user-docs/removal
+Verifiability: Public, versioned
+
+E-005
+Type: Documentation
+Description: Privacy practices corresponding to declared PRIVACY_RISK
+Location: https://example.org/privacy
+Verifiability: Public, auditable
+
+────────────────────────────────────────────
+BOUNDARY STATEMENT (IMPORTANT)
+────────────────────────────────────────────
+
+This evidence registry supports the claim that the manifest:
+
+- is formally specified
+- is evaluable by SLML
+- is grounded in documented, real-world facts
+
+It does not assert that the system’s behavior is correct, ethical, or complete.
+
+Truth of behavior remains falsifiable outside SLML.
+Legitimacy of claims remains decidable within SLML.
+
+That boundary is intentional and invariant.
