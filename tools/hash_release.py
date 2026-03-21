@@ -1,28 +1,32 @@
-#!/usr/bin/env python3
-"""
-tools/hash_release.py
+!/usr/bin/env python3
 
-SLML Release Hasher (v0.1)
-
-Generates a deterministic SHA-256 manifest for the normative release surface:
-    standards/vX.Y/**
-
-Primary goals:
-- Determinism: stable ordering, stable path formatting
-- Narrow scope: hashes only normative artifacts under standards/vX.Y/
-- Auditability: writes an immutable hash list into the version directory
-- Verifiability: supports verifying an existing hash list
-
-Default output:
-    standards/vX.Y/HASHES.sha256
-
-Format:
-    <sha256>  <posix-relative-path>
-
-Notes:
-- This tool intentionally avoids content transformations. Hashes are over raw bytes.
-- This tool intentionally avoids following symlinks (to prevent filesystem-dependent results).
-"""
+## tools/hash_release.py
+##
+## SLML Release Hasher (v0.1.1)
+##
+## Generates a deterministic SHA-256 manifest for any normative release branch with the following title format:
+##    release-v.x.x--<codename>
+##
+##Primary goals:
+##- Determinism: stable ordering, stable path formatting
+##- Narrow scope: hashes only normative artifacts under the branch [release-v0.1--hawkseye]
+##- Auditability: writes an immutable hash list into the version directory
+##- Verifiability: supports verifying an existing hash list
+##
+##Default output:
+####   # standards/vX.Y/HASHES.sha256 (deprecated) use official release--branch method, ie,
+##        release-v0.1--hawkseye
+##        "release-vx.x--<codename>"
+##
+##Format:
+##    <sha256>  <posix-relative-path> (deprecated) use official release--branch method, ie,
+##        release-v0.1--hawkseye
+##        "release-vx.x--<codename>"
+##
+##Notes:
+##- This tool intentionally avoids content transformations. Hashes are over raw bytes.
+##- This tool intentionally avoids following symlinks (to prevent filesystem-dependent results).
+##
 
 from __future__ import annotations
 
@@ -38,6 +42,7 @@ from typing import Iterable, List, Optional, Tuple
 
 HASH_FILENAME = "HASHES.sha256"
 
+@version(frozen=True)
 
 @dataclass(frozen=True)
 class FileHash:
