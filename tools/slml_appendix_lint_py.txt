@@ -3,18 +3,25 @@
 APPENDIX TOOL: SLML Repo Linter + Pre-Manifest Audit (SCA-lite)
 Non-authoritative. Advisory only.
 
-- Lints repo file/directory naming + extensions (per your conventions)
-- Performs a strict pre-manifest audit on JSON manifests (structure + invariants-ish)
+- Lints repo file/directory naming + extensions
+- Performs a strict pre-manifest audit on JSON manifests (structure + invariants)
 - Does NOT decide ADMISSIBLE/CORRUPTED. The canonical validator decides.
 
-Recommended path:
+Path:
   APPENDIX/tooling/slml_appendix_lint.py
 
 Usage:
-  python slml_appendix_lint.py repo-lint /path/to/repo
-  python slml_appendix_lint.py manifest-audit /path/to/manifest.json
-  python slml_appendix_lint.py manifest-audit --glob "/repo/**/v*_manifest.json"
-  python slml_appendix_lint.py all /path/to/repo --glob "**/*manifest.json"
+```bash
+  python slml_appendix_lint.py repo-lint /path/to/repo \
+
+  python slml_appendix_lint.py manifest-audit /path/to/manifest.json \
+
+  python slml_appendix_lint.py manifest-audit --glob "/repo/**/v*_manifest.json" \
+
+  python slml_appendix_lint.py all /path/to/repo --glob "**/*manifest.json" \
+
+```
+
 Exit codes:
   0 = no findings
   1 = findings present
@@ -33,13 +40,13 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 # ----------------------------
-# Conventions (Appendix policy)
+# Conventions
 # ----------------------------
 
 FORBIDDEN_EXTS = {".md", ".markdown", ".yaml", ".yml"}
 ALLOWED_EXTS = {".txt", ".RAW", ".json", ".py", ".toml", ".slml"}
 
-# Case rules (as-stated)
+# Case rules
 ACRONYM_ALL_CAPS = True
 RELEASE_CASE = "lower"
 CODENAME_CASE = "lower"
@@ -51,7 +58,7 @@ SNAKE_TOKEN_RE = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*$")
 # "formal.name_case = all caps"
 FORMAL_FILE_RE = re.compile(r"^[A-Z0-9]+(?:_[A-Z0-9]+)*\.[A-Za-z0-9]+$")
 
-# File name syntax (per your stated grammar)
+# File name syntax 
 # "[vXX]_[adv/adj(s)]_[noun(s)]_{[normative.extension]}.[released.ext]"
 # Example: v01_bobbing_heavy_apples_py.RAW
 # Implementation:
@@ -63,11 +70,11 @@ FILE_SYNTAX_RE = re.compile(r"^v(?P<v>\d{2})_(?P<body>.+)_(?P<meta>[A-Za-z0-9]+)
 # Directory name syntax (two allowed patterns)
 # 1) "[v.XX]_[NORM]_[noun]_[adj/adv(s)]/"
 # 2) "[v.X]_[referral noun]_[NORM]_[noun/adj/adv(s)]/"
-# We'll be permissive while still enforcing version prefix and useful casing.
+
 DIR_VDOT_RE = re.compile(r"^v(?P<maj>\d)\.(?P<min>\d{2})_(?P<rest>.+)$")
 DIR_VSHORT_RE = re.compile(r"^v(?P<maj>\d)\.(?P<min>\d)_(?P<rest>.+)$")
 
-# Known “mixed-casing allowed” patterns (explicit allowlist)
+# Allowed “mixed-casing" patterns (explicit allowlist)
 MIXED_CASE_ALLOWLIST = {
     "REFERENCES",
     "REFERENCE",
@@ -75,7 +82,7 @@ MIXED_CASE_ALLOWLIST = {
     "CONTRIBUTORS",
 }
 
-# SLML v0.1 hawkseye-ish manifest pre-audit expectations
+# SLML v0.1 hawkseye manifest pre-audit expectations
 CANONICAL_ROLES = {"DESIGNER", "USER", "BENEFICIARY", "COMPONENT", "PRODUCT", "SYSTEM"}
 REQUIRED_TOP_LEVEL_KEYS = {"entities", "system", "ownership", "consent", "inconvenience", "obligations"}
 
@@ -159,21 +166,21 @@ def _lint_dir_name(dname: str, full_path: str, repo_root: str) -> List[Finding]:
     if dname in MIXED_CASE_ALLOWLIST:
         return findings
 
-    # For most dirs, prefer snake_case OR versioned patterns.
+    # For most dirs, allowed snake_case OR versioned patterns.
     if SNAKE_TOKEN_RE.match(dname):
         return findings
 
     # Versioned patterns with v0.1_...
     if DIR_VDOT_RE.match(dname) or DIR_VSHORT_RE.match(dname):
-        # After version prefix, allow mixed casing for REF/NORM tokens, but enforce no spaces.
+        # After version prefix, allow mixed casing for REF/NORM tokens; enforce no spaces.
         return findings
 
-    # If it's all caps, treat as "formal" style directory (rare but permitted by your mixed rule)
+    # If it's all caps, treat as "formal" style directory (rare use cases, but permitted)
     if dname.isupper():
         return findings
 
     findings.append(Finding("L003_DIR_NAMING", "WARN", _relpath(full_path, repo_root),
-                            "Directory name does not match snake_case or versioned naming patterns."))
+                            "Directory name does not match conventional snake_case or SLML-versioned naming patterns."))
 
     return findings
 
@@ -184,17 +191,17 @@ def _lint_file_name(fname: str, full_path: str, repo_root: str) -> List[Finding]
 
     if ext in FORBIDDEN_EXTS:
         findings.append(Finding("L010_EXT_FORBIDDEN", "ERROR", _relpath(full_path, repo_root),
-                                f"Forbidden extension '{ext}'."))
+                                f"Forbidden extension/File Type '{ext}'."))
 
     # If extension is unknown, warn
     if ext and ext not in ALLOWED_EXTS and ext not in FORBIDDEN_EXTS:
         findings.append(Finding("L011_EXT_UNKNOWN", "WARN", _relpath(full_path, repo_root),
-                                f"Extension '{ext}' not in allowed set {sorted(ALLOWED_EXTS)}."))
+                                f"Extension '{ext}'/ File Type not in allowed set {sorted(ALLOWED_EXTS)}."))
 
     # ASCII sanity
     if not _is_ascii(fname):
         findings.append(Finding("L012_FILE_NON_ASCII", "ERROR", _relpath(full_path, repo_root),
-                                "File name contains non-ASCII characters."))
+                                "File name contains non-ASCII/unconventional characters."))
 
     # Spaces forbidden (consistent with codename_no.spaces; also good repo hygiene)
     if _has_spaces(fname):
@@ -205,7 +212,7 @@ def _lint_file_name(fname: str, full_path: str, repo_root: str) -> List[Finding]
     base = os.path.basename(fname)
     if base.isupper() and not FORMAL_FILE_RE.match(base):
         findings.append(Finding("L014_FORMAL_NAME_SHAPE", "WARN", _relpath(full_path, repo_root),
-                                "ALL_CAPS file name does not match FORMAL_FILE pattern."))
+                                "ALL_CAPS file name does not match conventional "FORMAL_FILE_ALL.caps" pattern."))
 
     # Normative naming syntax for versioned files: v01_..._py.RAW etc
     m = FILE_SYNTAX_RE.match(fname)
@@ -222,20 +229,20 @@ def _lint_file_name(fname: str, full_path: str, repo_root: str) -> List[Finding]
         # Accept: py,json,toml,slml,txt,RAW (marker without dot)
         if meta not in {"py", "json", "toml", "slml", "txt", "RAW"}:
             findings.append(Finding("L016_META_TOKEN_UNKNOWN", "WARN", _relpath(full_path, repo_root),
-                                    f"Meta token '{meta}' (normative.extension marker) is unusual."))
+                                    f"Meta token '{meta}' (normative.extension marker) is non-normative and disallowed."))
 
-        # Body token casing: prefer snake_case-ish, allow mixed for REFERENCES, READMEs, etc.
+        # Body token casing: prefer snake_case, allow mixed for REFERENCES, READMEs, etc.
         body = m.group("body")
-        # enforce no spaces already; just warn if odd punctuation
+        # no space already enforced; now warn if odd punctuation is used
         if not re.fullmatch(r"[A-Za-z0-9_]+", body):
             findings.append(Finding("L017_BODY_CHARS", "WARN", _relpath(full_path, repo_root),
-                                    "Body contains characters outside [A-Za-z0-9_]."))
+                                    "Filename contains characters outside [A-Za-z0-9_]."))
 
     else:
-        # Not every file must be versioned, but for canonical-ish areas it usually should be.
-        # We'll warn only if it *looks* like it should be versioned (contains 'v0' or 'v01').
+        # every file frozen for release must be versioned in it's filename, but for drafts it can be missing.
+        # ERROR if it it should be versioned (DOES not contain full versioning at filename start, but contains 'v0' or 'v01').
         if re.search(r"\bv\d", fname) and not fname.startswith("v"):
-            findings.append(Finding("L018_VERSION_TOKEN_POSITION", "WARN", _relpath(full_path, repo_root),
+            findings.append(Finding("L018_VERSION_TOKEN_POSITION", "ERROR", _relpath(full_path, repo_root),
                                     "Version token present but file does not start with 'vXX_'."))
 
     return findings
@@ -314,12 +321,11 @@ def audit_manifest(path: str) -> List[Finding]:
         for eid in users + bens:
             if not isinstance(eid, str) or eid not in entity_index:
                 findings.append(Finding("M021_SYSTEM_REF", "ERROR", path, f"Declared entity not found: {eid!r}"))
-        # alignment (hawkseye requirement)
         if set(users) != set(bens):
             findings.append(Finding("M022_USER_BEN_MISMATCH", "ERROR", path,
                                     "declared_user_entities must equal declared_beneficiary_entities."))
 
-    # Ownership strictness (your v0.1 invariants)
+    # Ownership strictness 
     ownership = data["ownership"]
     if ownership.get("ownership_explicit") is not True:
         findings.append(Finding("M030_OWNERSHIP_EXPLICIT", "ERROR", path, "ownership_explicit must be true."))
@@ -386,7 +392,7 @@ def audit_manifest(path: str) -> List[Finding]:
                     findings.append(Finding("M064_BURDEN_NUM", "ERROR", path,
                                             f"expected[{i}].{d} must be numeric."))
 
-    # Obligations: shape check (advisory; your validator is the authority)
+    # Obligations: shape check (advisory; RELEASED validator is the only authoritative check)
     for i, o in enumerate(data["obligations"]):
         if not isinstance(o, dict):
             findings.append(Finding("M070_OBL_NOT_OBJECT", "ERROR", path, f"obligations[{i}] must be an object."))
