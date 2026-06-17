@@ -1,0 +1,39 @@
+NOMENCLATURE
+
+This document mirrors NOMENCLATURE.toml.
+It is informative only. The authoritative nomenclature rules are in NOMENCLATURE.toml.
+
+------------------------------------------------------------
+
+What NOMENCLATURE.toml defines
+
+NOMENCLATURE.toml is the canonical naming convention reference for SLML v0.1.
+It defines the authoritative rules for:
+
+- Standard identity strings (full name, short name, version, codename)
+- Branch naming format: release-v{version}--{codename}
+- Git tag format: slml-v{version}
+- File naming by class: authoritative TOML, validator, docs mirrors,
+  standalone docs, RAW templates, versioned JSON, binding TXT
+- Required normative artifacts on the release branch
+- Compliance claim reference string formats
+- Hashing policy summary
+- Epistemic status by file extension
+- Directory authority map
+- Promotion path rules
+- Structural invariants
+
+------------------------------------------------------------
+
+Key rules summary
+
+Authoritative artifacts: ALL_CAPS.toml — release branch only.
+Validator: v0.1_SLML_validator.py — version-prefixed, acronym in ALL_CAPS.
+Docs mirrors: SAME_BASENAME_TXT — exact basename match, no suffixes.
+Standalone docs: descriptive name, no TOML counterpart required.
+Release branch: release-v{version}--{codename}
+Git tag: slml-v{version}
+Naming violations are treated as structural errors, not style issues.
+
+If there is any conflict between this document and NOMENCLATURE.toml,
+NOMENCLATURE.toml is authoritative.

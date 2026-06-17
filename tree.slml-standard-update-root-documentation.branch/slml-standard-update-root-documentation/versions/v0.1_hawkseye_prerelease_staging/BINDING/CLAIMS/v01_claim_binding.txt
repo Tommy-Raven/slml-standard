@@ -1,0 +1,158 @@
+STATUS: NORMATIVE
+APPLIES TO: SLML v0.1 (hawkseye)
+
+PURPOSE
+
+This document binds each declared claim to:
+
+the manifest fields that encode the claim
+
+the evaluation surface that assesses the claim
+
+the evidence class(es) that may support the claim
+
+
+This binding establishes traceability of claims. It does not assert correctness, approval, or real-world behavior.
+
+A claim not listed here is unbound and outside the claim surface for this binding set.
+
+
+---
+
+BINDING SCOPE
+
+bound_manifest: standard_releases/v0.1_hawkseye/BINDING/MANIFESTS/v01_binded_manifest.json
+bound_evidence_rules: standard_releases/v0.1_hawkseye/BINDING/EVIDENCE/v01_docs_json.RAW
+binding_version: v01
+spec: SLML/0.1(hawkseye)
+
+
+---
+
+CLAIM BINDINGS
+
+claim_id: CLAIM-001_ROLE_INTEGRITY
+claim_summary: Declared entities are explicit, uniquely identified, and each has exactly one canonical role.
+manifest_fields:
+
+entities[].id
+
+entities[].role evaluation_surface:
+
+validator.role_integrity evidence_classes:
+
+SPECIFICATION_ARTIFACT
+
+EXECUTABLE_ARTIFACT
+
+
+claim_id: CLAIM-002_USER_BENEFICIARY_ALIGNMENT
+claim_summary: Declared user entities and declared beneficiary entities are identical sets.
+manifest_fields:
+
+system.declared_user_entities
+
+system.declared_beneficiary_entities evaluation_surface:
+
+validator.user_beneficiary_alignment evidence_classes:
+
+SPECIFICATION_ARTIFACT
+
+EXECUTABLE_ARTIFACT
+
+
+claim_id: CLAIM-003_OWNERSHIP_DECLARATION
+claim_summary: Ownership is explicitly declared and control direction is downstream toward the user.
+manifest_fields:
+
+ownership.ownership_explicit
+
+ownership.control_direction evaluation_surface:
+
+validator.ownership_rules evidence_classes:
+
+SPECIFICATION_ARTIFACT
+
+POLICY_DOCUMENTATION
+
+
+claim_id: CLAIM-004_CONSENT_CONSTRAINTS
+claim_summary: Consent is explicit, not implied, renegotiable on change, and time-bounded.
+manifest_fields:
+
+consent.consent_explicit
+
+consent.implied_consent_accepted
+
+consent.renegotiation_on_change
+
+consent.consent_expires_at evaluation_surface:
+
+validator.consent_rules evidence_classes:
+
+SPECIFICATION_ARTIFACT
+
+POLICY_DOCUMENTATION
+
+
+claim_id: CLAIM-005_INCONVENIENCE_DECLARATION
+claim_summary: Inconvenience model is fully declared with dimensions, normalized weights, and complete expected burdens per listed entity.
+manifest_fields:
+
+inconvenience.model.dimensions
+
+inconvenience.weights
+
+inconvenience.expected[].entity
+
+inconvenience.expected[].* evaluation_surface:
+
+validator.inconvenience_weights
+
+validator.inconvenience_coverage evidence_classes:
+
+SPECIFICATION_ARTIFACT
+
+USER_DOCUMENTATION
+
+TECHNICAL_DOCUMENTATION
+
+
+claim_id: CLAIM-006_OBLIGATION_CONSTRAINTS
+claim_summary: Obligations conform to allowed direction, user-directed obligations are informational, revocable, non-consent-requiring, and time-bounded.
+manifest_fields:
+
+obligations[].from
+
+obligations[].to
+
+obligations[].type
+
+obligations[].revocable
+
+obligations[].consent_required
+
+obligations[].expires_at evaluation_surface:
+
+validator.obligation_rules evidence_classes:
+
+SPECIFICATION_ARTIFACT
+
+POLICY_DOCUMENTATION
+
+USER_DOCUMENTATION
+
+CHANGE_RECORD
+
+
+
+---
+
+BINDING BOUNDARY
+
+This file binds claims to evaluation surfaces and evidence classes. It does not add claims not present in the bound manifest. It does not alter validator outcomes. Validation remains solely determined by the validator defined in the corresponding standard release.
+
+
+---
+
+END OF FILE

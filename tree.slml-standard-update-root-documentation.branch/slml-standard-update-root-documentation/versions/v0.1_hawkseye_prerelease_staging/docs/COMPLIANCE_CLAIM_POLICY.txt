@@ -1,0 +1,148 @@
+COMPLIANCE CLAIM POLICY
+Structural Legitimacy Manifest Language (SLML)
+
+Version: 0.1
+Status: Informative Policy (Non-Normative)
+
+---
+
+1. PURPOSE
+
+This document defines the conditions under which statements claiming
+compliance with the Structural Legitimacy Manifest Language (SLML) are
+factually accurate.
+
+This policy does not grant rights, impose licensing terms, or constitute
+certification. It exists to prevent ambiguity and misleading attribution
+regarding SLML usage.
+
+---
+
+2. SCOPE
+
+This policy applies to any public or private statement that includes,
+but is not limited to, the phrases:
+
+- “SLML-compliant”
+- “Compliant with SLML”
+- “Validated against SLML”
+- “Conforms to SLML”
+- “SLML-certified”
+- “SLML-based certification”
+
+The policy applies regardless of whether such statements appear in:
+
+- documentation
+- marketing materials
+- technical reports
+- audit summaries
+- user interfaces
+- contracts or proposals
+
+---
+
+3. DEFINITIONS
+
+SLML Version  
+A specific, immutable release of the SLML standard identified by a
+version identifier (e.g., v0.1) and corresponding cryptographic hash.
+
+SLML Manifest  
+A complete, machine-readable Structural Legitimacy Manifest conforming
+to a specific SLML version.
+
+Validation  
+Deterministic evaluation of an SLML manifest against the rules of the
+referenced SLML version using a compatible validator.
+
+---
+
+4. ACCURATE COMPLIANCE CLAIMS
+
+A compliance claim referencing SLML is accurate only if ALL of the
+following conditions are met:
+
+1. Version Specificity  
+   The claim explicitly identifies the SLML version used
+   (e.g., “SLML v0.1”).
+
+2. Manifest Availability  
+   A complete SLML manifest exists for the system or artifact.
+
+3. Reproducible Validation  
+   The manifest can be validated using a compatible validator, producing
+   a binary result consistent with the claim.
+
+4. Traceability  
+   The claim references, directly or indirectly, a cryptographic hash or
+   immutable identifier of the SLML version used for validation.
+
+If any of these conditions is unmet, the claim is incomplete or
+misleading.
+
+---
+
+5. INACCURATE OR MISLEADING CLAIMS
+
+The following practices are considered inaccurate representations of
+SLML usage:
+
+- Claiming SLML compliance without identifying a specific version.
+- Claiming SLML compliance without a corresponding manifest.
+- Claiming SLML compliance based on partial, informal, or inferred
+  evaluation.
+- Claiming certification, endorsement, or approval by SLML, its author,
+  or contributors.
+- Using the SLML name or terminology to imply legitimacy without
+  auditable evidence.
+
+These determinations concern factual accuracy only and do not imply
+malice, intent, or legal liability.
+
+---
+
+6. NO CERTIFICATION AUTHORITY
+
+SLML is a standard, not a certifying body.
+
+Neither the author nor contributors:
+- issue certifications,
+- approve implementations,
+- or authorize third-party endorsement claims.
+
+Any certification programs referencing SLML are independent and must
+define their own criteria and accountability.
+
+---
+
+7. RELATION TO LICENSING
+
+This policy is independent of licensing terms.
+
+- Reuse of SLML text is governed by CC-BY 4.0.
+- Use of schemas, validators, and tooling is governed by Apache 2.0.
+
+Licensing permits reuse.  
+Compliance claims concern factual correctness.
+
+---
+
+8. NON-ENFORCEMENT STATEMENT
+
+This policy does not establish enforcement mechanisms and does not
+require adherence.
+
+It exists to provide clarity and to prevent ambiguity regarding the
+meaning of compliance claims involving SLML.
+
+---
+
+9. INTERPRETATION
+
+If ambiguity exists regarding a compliance claim, the absence of
+versioned, auditable evidence should be treated as absence of verified
+compliance.
+
+---
+
+End of Policy.

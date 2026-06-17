@@ -1,0 +1,67 @@
+HASH_POLICY
+
+This document mirrors HASH_POLICY.toml.
+It is informative only. The authoritative hash policy is HASH_POLICY.toml.
+
+------------------------------------------------------------
+
+What the hash policy does
+
+The hash policy defines how release integrity is verified for SLML artifacts.
+
+All normative .toml files on the release branch are hashed using SHA-256.
+Hashes are encoded in lowercase hex.
+The hash surface excludes the docs/ directory.
+The output is written to HASHES.sha256.
+
+------------------------------------------------------------
+
+Why hashing matters
+
+Hashes bind claims to exact artifact versions.
+Any modification to a hashed artifact after release is detectable.
+A compliance claim is only accurate if the artifact it references
+matches the hash recorded at release time.
+
+------------------------------------------------------------
+
+What is not hashed
+
+- docs/ directory contents
+- .json files
+- .txt files
+- .RAW files
+
+Only .toml files on the release branch are in scope.
+
+
+```toml
+[hash_policy]
+algorithm = "sha256"
+release_dir = "branch:release-v0.1--hawkseye"
+
+[hash_policy.required_files]
+authoritative_toml = [
+  "CHANGELOG.toml",
+  "ERROR_CODES.toml",
+  "GLOSSARY.toml",
+  "GOVERNANCE.toml",
+  "HASH_POLICY.toml",
+  "IMMUTABILITY.toml",
+  "LICENSE_CODE.toml",
+  "LICENSE_SPEC.toml",
+  "NON_COMPLIANT_PATTERNS.toml",
+  "NORMATIVE_EXAMPLES.toml",
+  "NOTICE.toml",
+  "RELEASE_METADATA.toml",
+  "SPEC.toml",
+  "SPEC_SCHEMA.toml",
+  "VERSION.toml"
+]
+
+[hash_policy.claim_binding]
+binded_manifest_path = "BINDING/SLML_01_binded_manifest.json"
+claims_text_path      = "BINDING/CLAIMS/SLML_01_claims.txt"
+evidence_raw_path     = "BINDING/EVIDENCE/SLML_01_docs.RAW"
+
+```

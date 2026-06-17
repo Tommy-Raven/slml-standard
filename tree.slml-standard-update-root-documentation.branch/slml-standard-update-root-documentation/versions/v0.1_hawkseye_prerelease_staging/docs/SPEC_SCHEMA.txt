@@ -1,0 +1,29 @@
+SPEC_SCHEMA
+
+This document mirrors SPEC_SCHEMA.toml.
+It is informative only. The authoritative schema is SPEC_SCHEMA.toml.
+
+------------------------------------------------------------
+
+What SPEC_SCHEMA.toml defines
+
+SPEC_SCHEMA.toml is the machine-ingestible schema for SPEC.toml.
+It defines the required fields, types, and allowed values for every
+key in the normative specification.
+
+It exists to make SPEC.toml mechanically verifiable —
+any tool reading the spec can confirm it matches the declared schema.
+
+------------------------------------------------------------
+
+How it works
+
+Each field entry in SPEC_SCHEMA.toml declares:
+- path: the dotted key path in SPEC.toml
+- type: the expected data type
+- required: whether the field must be present
+- enum or contains_set: the allowed values
+
+If SPEC.toml is modified, SPEC_SCHEMA.toml must be updated
+to match. A spec that does not conform to its own schema
+is structurally inconsistent.

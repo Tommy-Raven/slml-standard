@@ -1,0 +1,48 @@
+GLOSSARY EXPLAINED
+
+This document explains glossary terms in plain language.
+It is informative only.
+
+The authoritative glossary is GLOSSARY.toml.
+
+------------------------------------------------------------
+
+Admissible
+
+A manifest is admissible when it satisfies all required invariants and
+passes validation.
+
+Admissible does not mean endorsed or approved.
+It means structurally consistent and validated.
+
+------------------------------------------------------------
+
+Corrupted
+
+A manifest is corrupted when it violates an invariant or is incomplete.
+
+Corrupted means “not permitted to claim compliance”.
+
+------------------------------------------------------------
+
+Manifest
+
+A manifest is a machine-ingestible structured claim about a system.
+It is not a guarantee.
+It is a falsifiable assertion.
+
+------------------------------------------------------------
+
+Inconvenience
+
+Inconvenience is declared burden imposed by a system.
+
+Examples include time, cost, risk, or loss of agency.
+
+------------------------------------------------------------
+
+Obligation
+
+An obligation is a requirement one entity imposes on another.
+
+SLML restricts obligations that can be imposed on users.

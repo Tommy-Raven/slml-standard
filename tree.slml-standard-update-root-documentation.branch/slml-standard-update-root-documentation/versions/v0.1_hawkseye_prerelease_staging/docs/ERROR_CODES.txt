@@ -1,0 +1,43 @@
+ERROR CODES EXPLAINED
+
+This document explains error codes in plain language.
+It is informative only.
+
+The authoritative error registry is ERROR_CODES.toml.
+
+------------------------------------------------------------
+
+What an error code means
+
+An error code indicates that a manifest violates a required invariant.
+
+An error code does not imply bad intent.
+It indicates that the manifest is structurally invalid or contradictory.
+
+------------------------------------------------------------
+
+How to respond to an error code
+
+There are only two valid remediation actions:
+
+1) Change the system so the manifest becomes true.
+2) Change the manifest so it accurately reflects reality.
+
+Changing text to “pass” while reality remains unchanged is misuse.
+
+------------------------------------------------------------
+
+Common examples
+
+R000_PARSE_FAILURE:
+The manifest is missing required structure or fields.
+
+R001_USER_BENEFICIARY_MISMATCH:
+Declared users and declared beneficiaries are not exactly equal.
+In v0.1, this includes any case where a third party benefits.
+
+R007_WEIGHTS_INVALID:
+Inconvenience weights are invalid or do not normalize.
+
+R014_USER_COERCIVE_OBLIGATION:
+A user is being subjected to a coercive obligation, which is prohibited.

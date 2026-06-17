@@ -1,0 +1,45 @@
+WORKED EXAMPLE: LYRIC EVALUATION WORKFLOW UNDER SLML v0.1 (HAWKSEYE)
+
+This document explains why a closed lyric evaluation workflow can qualify.
+It is informative only.
+
+The authoritative example definition is NORMATIVE_EXAMPLES.toml.
+
+------------------------------------------------------------
+
+Why it can qualify
+
+A lyric evaluation workflow can qualify when:
+
+- it treats the lyric text as a closed input for the session,
+- it does not reuse or externalize the lyric text,
+- it does not train or aggregate across sessions,
+- it does not create third-party benefit from the lyric text,
+(In v0.1, the workflow qualifies only if the user is the only beneficiary.
+No third-party beneficiary is permitted.)
+- and it is explicit about its obligations and constraints.
+
+------------------------------------------------------------
+
+What “closed” means here
+
+Closed means the workflow is not allowed to:
+
+- compare against external corpora,
+- store lyrics for reuse,
+- share lyrics externally,
+- derive persistent benefit for parties not declared in the manifest.
+
+------------------------------------------------------------
+
+How admissibility is protected
+
+Admissibility is protected by:
+
+- explicit consent requirements,
+- explicit ownership and control direction,
+- explicit inconvenience declaration,
+- and strict obligation restrictions.
+
+If any of these change in reality, the manifest must change.
+If the manifest does not change, compliance becomes false.

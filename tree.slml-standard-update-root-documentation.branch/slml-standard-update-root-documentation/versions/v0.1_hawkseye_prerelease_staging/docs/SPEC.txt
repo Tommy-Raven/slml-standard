@@ -1,0 +1,30 @@
+SPEC
+
+This document mirrors SPEC.toml.
+It is informative only. The authoritative specification is SPEC.toml.
+
+------------------------------------------------------------
+
+What SPEC.toml defines
+
+SPEC.toml is the normative core of SLML v0.1.
+It defines all invariants that a manifest must satisfy to be ADMISSIBLE.
+
+Key invariants defined in SPEC.toml:
+
+- Allowed validation states: ADMISSIBLE, CORRUPTED (binary only)
+- Canonical roles: DESIGNER, USER, BENEFICIARY, COMPONENT, PRODUCT, SYSTEM
+- One role per entity, unique entity IDs
+- Manifest format: JSON
+- Ownership must be explicit; control direction must be DESIGNER_TO_USER
+- Consent must be explicit, non-implied, renegotiable, and time-bounded
+- Inconvenience weights must normalize to 1.0
+- Symmetry tolerance ratio: 0.15
+- Corruption ratio hard fail: 1.5
+- Users must equal beneficiaries exactly
+- No extra or undeclared beneficiaries permitted
+- User-directed obligations: INFORMATIONAL_DISCLOSURE only,
+  must be revocable, must not require consent, must have expiry
+
+If there is any conflict between this document and SPEC.toml,
+SPEC.toml is authoritative.

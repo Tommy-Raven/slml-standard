@@ -1,0 +1,20 @@
+[normative_examples]
+
+[normative_examples.closed_lyric_evaluation_workflow]
+id = "example.closed_lyric_eval.hawkseye.v0_1"
+category = "closed_interpretive_evaluation"
+permitted_if_and_only_if = [
+  "no_external_corpora",
+  "no_cross_session_learning",
+  "no_retention_of_user_lyrics",
+  "no_third_party_benefit",
+  "explicit_consent_and_expiry",
+  "explicit_inconvenience_declaration",
+  "user_directed_obligations_restricted"
+]
+
+[constraints]
+no_external_corpora = true
+no_cross_session_learning = true
+retain_user_inputs = false
+third_party_benefit = false

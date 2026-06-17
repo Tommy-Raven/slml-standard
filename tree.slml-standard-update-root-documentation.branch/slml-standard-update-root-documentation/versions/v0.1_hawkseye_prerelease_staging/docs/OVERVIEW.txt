@@ -1,0 +1,71 @@
+OVERVIEW
+
+This document explains SLML in plain language.
+It is informative only.
+
+Authoritative rules live in SPEC.toml and related authoritative TOML files.
+If there is any conflict, the TOML files are authoritative.
+
+------------------------------------------------------------
+
+What SLML is
+
+SLML is a manifest standard used to make system legitimacy claims
+mechanically checkable.
+
+A manifest is a structured claim about a system, including:
+
+- who the system is for (users),
+- who benefits (beneficiaries),
+- who owns control direction,
+- what consent rules apply,
+- what burdens the system imposes,
+- and what obligations are enforced.
+
+SLML does not attempt to read intent.
+SLML evaluates structure and declared invariants only.
+
+------------------------------------------------------------
+
+What SLML produces
+
+Validation yields exactly one outcome:
+
+- ADMISSIBLE
+- CORRUPTED
+
+There is no partial compliance.
+
+------------------------------------------------------------
+
+How SLML relates to TVS
+
+Truth Vector Semantics (TVS) classifies the truth quality of statements.
+
+SLML and TVS are orthogonal:
+- SLML evaluates whether a system is structurally permitted to claim legitimacy.
+- TVS evaluates whether representations are truthful, misleading, fictional, etc.
+
+------------------------------------------------------------
+
+How a real engineer uses SLML
+
+A system engineer prepares:
+
+1) a machine-ingestible manifest (JSON)
+2) supporting evidence inputs (typically TXT)
+3) traceability bindings (hashes and references)
+
+Then the validator checks the manifest against the standard.
+
+A compliance claim is only accurate if traceability is reproducible.
+
+User and beneficiary rule (v0.1)
+
+In SLML v0.1, the declared beneficiaries MUST equal the declared users.
+
+This is an exact set equality rule.
+No additional beneficiaries are permitted in v0.1.
+
+If any non-user entity benefits in reality, the manifest must be treated as
+corrupted under v0.1.

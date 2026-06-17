@@ -1,0 +1,23 @@
+Structural Legitimacy Manifest Language (SLML)
+
+Standard Version: 0.1
+Release Status: Released (Immutable)
+
+This version represents the initial standardized release of SLML.
+
+SLML v0.1 defines:
+- the core manifest structure,
+- mandatory legitimacy invariants,
+- admissibility outcomes (ADMISSIBLE or CORRUPTED),
+- and the canonical validation model.
+
+Once released, this version is immutable.
+No changes may be made to the v0.1 standard text or semantics.
+
+Any modification, extension, or correction requires:
+- a new version directory (for example: v0.2),
+- a new version identifier,
+- and an updated self-manifest.
+
+This file is informational only.
+The authoritative version identifier is defined in VERSION.toml.

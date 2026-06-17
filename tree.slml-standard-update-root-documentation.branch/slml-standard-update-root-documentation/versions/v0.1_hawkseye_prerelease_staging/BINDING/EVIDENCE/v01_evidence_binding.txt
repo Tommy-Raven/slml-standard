@@ -1,0 +1,195 @@
+v01_evidence_binding.txt
+
+STATUS: NORMATIVE
+APPLIES TO: SLML v0.1 (hawkseye)
+
+PURPOSE
+
+This document binds a concrete evidence registry to the normative evidence documentation rules defined in:
+
+standard_releases/v0.1_hawkseye/BINDING/EVIDENCE/v01_docs_json.RAW
+
+This binding establishes which evidence entries are in scope for a given manifest binding and confirms that they conform to the recognized documentation classes.
+
+This document does not assert correctness of system behavior. It establishes evidence traceability only.
+
+
+---
+
+EVIDENCE RULE SOURCE
+
+evidence_rules_id: v01_docs_json.RAW
+evidence_rules_location: standard_releases/v0.1_hawkseye/BINDING/EVIDENCE/
+evidence_rules_version: v01
+spec: SLML/0.1(hawkseye)
+
+All evidence bound by this file MUST conform to the classes, requirements, and constraints defined in the referenced evidence rules document.
+
+
+---
+
+BOUND MANIFEST
+
+bound_manifest: standard_releases/v0.1_hawkseye/BINDING/MANIFESTS/v01_binded_manifest.json
+
+All evidence entries listed below are bound to claims expressed in the above manifest and enumerated in the corresponding claim binding file.
+
+
+---
+
+BOUND CLAIM BINDING
+
+bound_claim_binding: standard_releases/v0.1_hawkseye/BINDING/MANIFESTS/claim_binding.txt
+
+Each evidence entry MUST support one or more claims defined in the bound claim binding file.
+
+
+---
+
+EVIDENCE REGISTRY
+
+registry_id: v01_evidence_registry
+registry_version: v01
+
+Each registry entry below conforms to the required evidence entry shape defined in v01_docs_json.RAW.
+
+
+---
+
+EVIDENCE ENTRY
+
+evidence_id: E-001
+evidence_class: SPECIFICATION_ARTIFACT
+description: SLML v0.1 (hawkseye) canonical specification
+reference: standard_releases/v0.1_hawkseye/SPEC.toml
+verifiability: hash-verifiable, repository-stable
+supports_claims:
+
+CLAIM-001_ROLE_INTEGRITY
+
+CLAIM-002_USER_BENEFICIARY_ALIGNMENT
+
+CLAIM-003_OWNERSHIP_DECLARATION
+
+CLAIM-004_CONSENT_CONSTRAINTS
+
+CLAIM-005_INCONVENIENCE_DECLARATION
+
+CLAIM-006_OBLIGATION_CONSTRAINTS
+
+
+
+---
+
+EVIDENCE ENTRY
+
+evidence_id: E-002
+evidence_class: EXECUTABLE_ARTIFACT
+description: SLML v0.1 canonical validator implementation
+reference: standard_releases/v0.1_hawkseye/validator
+verifiability: hash-verifiable, deterministic
+supports_claims:
+
+CLAIM-001_ROLE_INTEGRITY
+
+CLAIM-002_USER_BENEFICIARY_ALIGNMENT
+
+CLAIM-003_OWNERSHIP_DECLARATION
+
+CLAIM-004_CONSENT_CONSTRAINTS
+
+CLAIM-005_INCONVENIENCE_DECLARATION
+
+CLAIM-006_OBLIGATION_CONSTRAINTS
+
+
+
+---
+
+EVIDENCE ENTRY
+
+evidence_id: E-003
+evidence_class: POLICY_DOCUMENTATION
+description: Public consent and data handling policy
+reference: https://example.org/consent-policy
+verifiability: public, date-stamped
+supports_claims:
+
+CLAIM-003_OWNERSHIP_DECLARATION
+
+CLAIM-004_CONSENT_CONSTRAINTS
+
+CLAIM-006_OBLIGATION_CONSTRAINTS
+
+
+
+---
+
+EVIDENCE ENTRY
+
+evidence_id: E-004
+evidence_class: USER_DOCUMENTATION
+description: User-facing documentation describing behavior and removal
+reference: https://example.org/user-docs/removal
+verifiability: public, versioned
+supports_claims:
+
+CLAIM-005_INCONVENIENCE_DECLARATION
+
+CLAIM-006_OBLIGATION_CONSTRAINTS
+
+
+
+---
+
+EVIDENCE ENTRY
+
+evidence_id: E-005
+evidence_class: CHANGE_RECORD
+description: Published update and change history
+reference: https://example.org/changelog
+verifiability: chronologically ordered, public
+supports_claims:
+
+CLAIM-004_CONSENT_CONSTRAINTS
+
+CLAIM-006_OBLIGATION_CONSTRAINTS
+
+
+
+---
+
+TRACEABILITY CONSTRAINTS
+
+All evidence entries listed above:
+
+are explicitly referenced
+
+are bound to specific claims
+
+conform to a recognized documentation class
+
+are independently referable
+
+
+Any evidence not listed in this registry is out of scope for this binding.
+
+
+---
+
+IMMUTABILITY
+
+This evidence binding is version-frozen. Any addition, removal, or modification of evidence entries requires a new evidence binding file with a new version identifier.
+
+
+---
+
+BOUNDARY
+
+This document binds evidence to claims. It does not influence validation outcomes. Validation remains solely determined by the validator defined in the corresponding standard release.
+
+
+---
+
+END OF FILE
+  

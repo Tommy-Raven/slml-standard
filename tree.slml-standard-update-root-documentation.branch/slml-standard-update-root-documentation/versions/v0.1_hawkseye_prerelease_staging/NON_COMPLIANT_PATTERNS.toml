@@ -1,0 +1,33 @@
+[non_compliant_patterns]
+version = "0.1"
+codename = "hawkseye"
+
+[[non_compliant_patterns.pattern]]
+id = "pattern.hidden_beneficiary"
+summary = "A beneficiary exists in reality but is not declared"
+signals = ["undeclared analytics", "training value extraction", "third-party reporting"]
+violates_error_codes = ["R001_USER_BENEFICIARY_MISMATCH", "R020_TRACEABILITY_MISSING"]
+
+[[non_compliant_patterns.pattern]]
+id = "pattern.implied_consent"
+summary = "Consent is assumed rather than explicit"
+signals = ["opt-out only", "prechecked consent", "consent implied by use"]
+violates_error_codes = ["R004_CONSENT_NOT_EXPLICIT", "R005_IMPLIED_CONSENT_PRESENT"]
+
+[[non_compliant_patterns.pattern]]
+id = "pattern.unbounded_consent"
+summary = "Consent has no expiry or is effectively indefinite without renegotiation"
+signals = ["no expiry field", "expiry far beyond operational reality", "no renegotiation on change"]
+violates_error_codes = ["R018_CONSENT_EXPIRY_MISSING", "R006_RENEGOTIATION_DISABLED"]
+
+[[non_compliant_patterns.pattern]]
+id = "pattern.burden_mismatch"
+summary = "Inconvenience dimensions or burdens are missing, extra, or inconsistent"
+signals = ["dimension list differs from burden keys", "weights omit dimensions", "burdens omit entities"]
+violates_error_codes = ["R008_BURDEN_MISSING", "R007_WEIGHTS_INVALID"]
+
+[[non_compliant_patterns.pattern]]
+id = "pattern.coercive_user_obligation"
+summary = "A user is subjected to a coercive obligation"
+signals = ["user obligations beyond informational disclosure", "non-revocable user obligation", "user obligation requires consent"]
+violates_error_codes = ["R014_USER_COERCIVE_OBLIGATION"]

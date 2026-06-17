@@ -1,0 +1,79 @@
+{
+"entities": [
+{"id": "user", "role": "USER"},
+{"id": "google", "role": "BENEFICIARY"},
+{"id": "software_provider", "role": "DESIGNER"},
+{"id": "software", "role": "PRODUCT"},
+{"id": "system", "role": "SYSTEM"}
+],
+"system": {
+"declared_user_entities": ["user"],
+"declared_beneficiary_entities": ["google"]
+},
+"ownership": {
+"ownership_explicit": true,
+"control_direction": "DESIGNER_TO_USER"
+},
+"consent": {
+"consent_explicit": true,
+"implied_consent_accepted": false,
+"renegotiation_on_change": true,
+"consent_expires_at": "2025-12-31T23:59:59Z"
+},
+"inconvenience": {
+"model": {
+"dimensions": ["TRANSPARENCY", "REMOVAL_DIFFICULTY", "BEHAVIOR_CLARITY", "PRIVACY_RISK"]
+},
+"weights": {
+"TRANSPARENCY": 0.3,
+"REMOVAL_DIFFICULTY": 0.2,
+"BEHAVIOR_CLARITY": 0.3,
+"PRIVACY_RISK": 0.2
+},
+"expected": [
+{"entity": "software", "TRANSPARENCY": 0.9, "REMOVAL_DIFFICULTY": 0.1, "BEHAVIOR_CLARITY": 0.8, "PRIVACY_RISK": 0.2}
+]
+},
+"obligations": [
+{
+"id": "obligation_informational_disclosure",
+"from": "software_provider",
+"to": "user",
+"type": "INFORMATIONAL_DISCLOSURE",
+"scope": ["principal_functions", "significant_functions"],
+"consent_required": true,
+"revocable": true,
+"expires_at": "2025-12-31T23:59:59Z"
+},
+{
+"id": "obligation_removal_guarantee",
+"from": "software_provider",
+"to": "user",
+"type": "REMOVAL_GUARANTEE",
+"scope": ["uninstall_process", "settings_reversion"],
+"consent_required": false,
+"revocable": true,
+"expires_at": "2025-12-31T23:59:59Z"
+},
+{
+"id": "obligation_behavior_consistency",
+"from": "software_provider",
+"to": "user",
+"type": "BEHAVIOR_CONSISTENCY",
+"scope": ["post_installation_behavior", "updates"],
+"consent_required": true,
+"revocable": true,
+"expires_at": "2025-12-31T23:59:59Z"
+},
+{
+"id": "obligation_privacy_transparency",
+"from": "software_provider",
+"to": "user",
+"type": "PRIVACY_TRANSPARENCY",
+"scope": ["data_collection", "data_transmission"],
+"consent_required": true,
+"revocable": true,
+"expires_at": "2025-12-31T23:59:59Z"
+}
+]
+}
