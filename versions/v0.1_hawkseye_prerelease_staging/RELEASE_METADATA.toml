@@ -11,7 +11,7 @@ codename = "hawkseye"
 canonical_release_root = "branch:release-v0.1--hawkseye"
 
 # Populated at freeze time
-tag = "<TO_BE_SET_AT_FREEZE>"
+tag = "slml-v0.1"
 commit_hash = "<TO_BE_SET_AT_FREEZE>"
 freeze_timestamp_utc = "<TO_BE_SET_AT_FREEZE>"
 
