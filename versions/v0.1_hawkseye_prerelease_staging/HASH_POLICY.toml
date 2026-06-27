@@ -4,21 +4,23 @@ release_dir = "branch:release-v0.1--hawkseye"
 
 [hash_policy.required_files]
 authoritative_toml = [
-  "CHANGELOG.toml",
-  "ERROR_CODES.toml",
-  "GLOSSARY.toml",
-  "GOVERNANCE.toml",
-  "HASH_POLICY.toml",
-  "IMMUTABILITY.toml",
-  "LICENSE_CODE.toml",
-  "LICENSE_SPEC.toml",
-  "NON_COMPLIANT_PATTERNS.toml",
-  "NORMATIVE_EXAMPLES.toml",
-  "NOTICE.toml",
-  "RELEASE_METADATA.toml",
   "SPEC.toml",
   "SPEC_SCHEMA.toml",
-  "VERSION.toml"
+  "VERSION.toml",
+  "ERROR_CODES.toml",
+  "GLOSSARY.toml",
+  "NORMATIVE_EXAMPLES.toml",
+  "NON_COMPLIANT_PATTERNS.toml",
+  "HASH_POLICY.toml",
+  "IMMUTABILITY.toml",
+  "NOTICE.toml",
+  "RELEASE_METADATA.toml",
+  "LICENSE_CODE.toml",
+  "LICENSE_SPEC.toml",
+  "GOVERNANCE.toml",
+  "CHANGELOG.toml",
+  "NOMENCLATURE.toml",
+  "v0.1_SLML_validator.py"
 ]
 
 [hash_policy.claim_binding]
