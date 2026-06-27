@@ -24,6 +24,6 @@ authoritative_toml = [
 ]
 
 [hash_policy.claim_binding]
-binded_manifest_path = "BINDING/SLML_01_binded_manifest.json"
-claims_text_path      = "BINDING/CLAIMS/SLML_01_claims.txt"
-evidence_raw_path     = "BINDING/EVIDENCE/SLML_01_docs.RAW"
+binded_manifest_path = "BINDING/MANIFESTS/v01_binded_manifest.json"
+claims_text_path      = "BINDING/CLAIMS/v01_binded_claims.txt"
+evidence_raw_path     = "BINDING/EVIDENCE/v01_evidence_doc_json.RAW"
