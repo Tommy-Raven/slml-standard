@@ -3,7 +3,7 @@ standard_name = "SLML"
 artifact = "RELEASE_METADATA.toml"
 governance_version = "1.0"
 metadata_schema_version = "1.0"
-status = "NORMATIVE"
+status = "FREEZE-READY"
 
 [release]
 version = "v0.1"
