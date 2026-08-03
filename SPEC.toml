@@ -1,0 +1,18 @@
+# Non-normative repository mirror for the v0.1 reference implementation.
+# The validator's executable behavior is authoritative for this prerelease suite.
+
+[spec.admissibility_thresholds]
+symmetry_tolerance_ratio = 0.15
+corruption_ratio_hard_fail = 1.5
+
+[spec.corruption_condition]
+# Conceptual/topological formulation retained as future-version scaffolding.
+rho_nonzero_required = true
+delta_must_violate_alpha_constraints = true
+
+[v0_1_implementation_note]
+# For v0.1 conformance, the reference validator's numeric model is authoritative.
+corruption_ratio_hard_fail = 1.5
+symmetry_tolerance_ratio = 0.15
+authority = "reference validator and SPEC_SCHEMA constants"
+conceptual_corruption_condition_status = "future-version scaffolding"

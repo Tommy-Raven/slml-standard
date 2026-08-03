@@ -1,0 +1,17 @@
+entities = [{id="d", role="DESIGNER"}, {id="u", role="USER"}, {id="b", role="BENEFICIARY"}, {id="p", role="PRODUCT"}]
+obligations = []
+[system]
+declared_user_entities = ["u"]
+declared_beneficiary_entities = ["u"]
+[ownership]
+ownership_explicit = true
+control_direction = "DESIGNER_TO_USER"
+[consent]
+consent_explicit = true
+implied_consent_accepted = false
+renegotiation_on_change = true
+[inconvenience.model]
+dimensions = ["time"]
+[inconvenience]
+weights = {time = 1.0}
+expected = [{entity="u", time=1.0}, {entity="b", time=1.0}]
