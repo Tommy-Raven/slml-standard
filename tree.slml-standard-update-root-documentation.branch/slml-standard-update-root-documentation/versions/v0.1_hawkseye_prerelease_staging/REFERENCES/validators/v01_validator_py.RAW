@@ -1,1 +1,0 @@
-class SLMLValidatorV01: def validate(self, manifest): raise NotImplementedError

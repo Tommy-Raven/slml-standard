@@ -1,26 +1,55 @@
-﻿SLML STANDARD MONO REPOSITORY
+SLML STANDARD MONO REPOSITORY
 =============================
 
-This root branch ("main") is NON-AUTHORITATIVE and NON-NORMATIVE.
+This repository root is NON-AUTHORITATIVE and NON-NORMATIVE. It is a
+staging area for drafts, proposals, explanatory material, examples,
+tools, and contributor documentation. No file in this root defines the
+SLML standard.
 
-It serves only as:
-- an index of released versions
-- a staging area for drafts and proposals
-- a home for non-normative documentation, examples, tools, and contributor materials
+SLML means Structural Legitimacy Manifest Language.
 
-No file in this branch defines the SLML standard.
+RELEASE READINESS / CURRENT STATUS
+----------------------------------
 
-----------------------------------------------------------------
+SLML v0.1 is PRE-RELEASE.
+
+The repository does not currently provide an independently verifiable
+immutable release. No compliance, certification, or release-integrity
+claim may rely on the current repository state.
+
+Tags, hashes, metadata, validator code, and release-branch conventions
+are preparatory only until every release-readiness requirement has been
+satisfied and independently verified. References below to release
+branches, tags, hashes, or immutable artifacts describe future
+requirements, not the status of this repository.
+
+DOCUMENTATION CLAIM RESTRICTION
+-------------------------------
+
+Until release readiness is complete, repository documentation, examples,
+metadata descriptions, and contributor-facing materials MUST NOT assert
+that anything is:
+
+- released
+- certified under SLML
+- an immutable standard
+- a cryptographically sealed release
+- independently verifiable compliance
+
+Use qualified terms such as PRE-RELEASE, DRAFT, STAGING, or RELEASE
+CANDIDATE instead. The restricted phrases may appear only when explicitly
+discussing this prohibition or a future release-readiness condition.
+
 AUTHORITY AND JURISDICTION
-----------------------------------------------------------------
+---------------------------
 
-Normative authority exists EXCLUSIVELY on release branches named:
+Normative authority is intended to exist only on a future release branch
+named:
 
     release-vX.X--codename
 
-Authority is locked to TAGGED COMMITS on those branches.
+Such authority would require, at minimum, all of the following:
 
-A release is authoritative only when all of the following are present:
     1. version identifier (vX.X)
     2. release tag
     3. commit hash
@@ -28,100 +57,30 @@ A release is authoritative only when all of the following are present:
     5. release_metadata.toml
     6. immutability declaration
 
-Any material outside a release branch is NON-NORMATIVE.
+These are release-readiness requirements. They are not evidence that a
+release currently exists.
 
-----------------------------------------------------------------
 ROOT BRANCH STATUS
-----------------------------------------------------------------
+------------------
 
-The root branch MUST remain permanently non-authoritative.
+The root branch remains permanently non-authoritative. It may contain
+drafts, mirrors, proposals, non-normative explanations, exploratory work,
+utilities, examples, historical material, and contributor guidance.
 
-It may contain:
-    versions/        (drafts, mirrors, proposals)
-    contributors/    (governance, CLA, caretaker rules)
-    docs/            (non-normative explanations)
-    experimental/    (hypothetical or exploratory work)
-    tools/           (non-normative utilities)
-    manifests/       (examples only)
-    appendix/        (historical or contextual material)
+Directory presence does not imply authority. Authority, if established
+in the future, must be conferred by the complete release-readiness
+process and its independently verifiable evidence.
 
-It DOES NOT contain:
-    normative specifications
-    authoritative schemas
-    authoritative validators
-    authoritative governance capsules
-    authoritative examples
-    authoritative release artifacts
-Any document that resembles or attempts to assume an authoritative or normative status shall not be considered as such when located in the repo_root directory. 
-
-----------------------------------------------------------------
-IMMUTABILITY MODEL
-----------------------------------------------------------------
-
-Release branches are append-only and immutable after tagging.
-
-Rules:
-- No force-push
-- No merges
-- No rebases
-- No direct pushes
-- Only append-only commits for minor version increments such as typos or grammatical, mechanical or punctuation edits
-- Major changes require a new release branch, such as a validator script update or new manifest required json fields, or a semantic change to any canonical documents.
-
-Authority does not migrate forward implicitly.
-
-----------------------------------------------------------------
-VERSIONING MODEL
-----------------------------------------------------------------
-
-Each authoritative release exists on its own branch:
-
-    release-v0.1--hawkseye
-    release-v1.0--<codename>
-    release-v2.0--<codename>
-
-Each branch contains:
-    - the frozen normative specification
-    - schemas
-    - validator
-    - governance capsule
-    - release-metadata.toml
-
-----------------------------------------------------------------
 NON-NORMATIVE OVERVIEW
-----------------------------------------------------------------
+----------------------
 
-SLML is a binary output, design-time structural admissibility gate.
-
-It evaluates:
-    - explicit ownership
-    - explicit consent
-    - direction of the Flow of Obligation
-    - post-system convergences of Inconvenience
-
-It does NOT evaluate:
-    - intent
-    - morality
-    - legality
-    - popularity
-    - utility
-    - blame
-    - truth
+SLML is intended as a binary-output, design-time structural admissibility
+gate. It evaluates structural conditions such as explicit ownership,
+explicit consent, obligation directionality, and post-system
+convergences of inconvenience. It does not evaluate intent, morality,
+legality, popularity, utility, blame, or truth.
 
 Truth Vector Semantics (TVS) is orthogonal and evaluates truth fracture.
 
-----------------------------------------------------------------
-DIRECTORY PRESENCE PRINCIPLE
-----------------------------------------------------------------
-
-Presence of a directory does NOT imply authority.
-
-Authority is conferred ONLY by:
-    - placement on a release branch
-    - presence of a release tag
-    - presence of release-metadata.toml
-    - matching commit hash
-
-----------------------------------------------------------------
 END OF README
-----------------------------------------------------------------
+------------

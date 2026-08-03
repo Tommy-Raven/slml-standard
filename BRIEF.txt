@@ -1,0 +1,81 @@
+INSTITUTIONAL BRIEF
+STRUCTURAL LEGITIMACY MANIFEST LANGUAGE (SLML)
+===========================================
+
+STATUS
+------
+
+This document is NON-NORMATIVE. It does not define, modify, or extend
+the SLML standard.
+
+SLML v0.1 is PRE-RELEASE. The repository does not currently provide an
+independently verifiable immutable release. No compliance, certification,
+or release-integrity claim may rely on the current repository state.
+
+For the authoritative repository status and release-readiness conditions,
+see the root README.txt. Any reference in this brief to a future
+implementation path, release branch, tag, hash, metadata, validator, or
+immutability mechanism is preparatory and does not establish a release.
+
+DOCUMENTATION CLAIM RESTRICTION
+-------------------------------
+
+Until release readiness is complete, repository documentation, examples,
+metadata descriptions, and contributor-facing materials MUST NOT assert
+that anything is:
+
+- released
+- certified under SLML
+- an immutable standard
+- a cryptographically sealed release
+- independently verifiable compliance
+
+Use qualified terms such as PRE-RELEASE, DRAFT, STAGING, or RELEASE
+CANDIDATE instead. The restricted phrases may appear only when explicitly
+discussing this prohibition or a future release-readiness condition.
+
+PURPOSE
+-------
+
+The Structural Legitimacy Manifest Language (SLML) is a proposed,
+standardized, binary-output, deterministic evaluation framework intended
+to assess whether a system is structurally admissible to claim
+user-serving legitimacy.
+
+SLML addresses a specific institutional gap: existing mechanisms such as
+ethics guidelines, audits, compliance programs, and fact-checking systems
+primarily evaluate intent, outcomes, or content after harm has occurred.
+SLML is intended to evaluate structure at design time.
+
+SCOPE OF EVALUATION
+-------------------
+
+SLML is intended to evaluate ONLY structural admissibility, including:
+
+- explicit ownership
+- explicit consent
+- obligation directionality
+- inconvenience symmetry
+
+It is not intended to evaluate moral intent, legality, popularity,
+utility, benefit aggregation, outcome quality, harm severity, or policy
+compliance. It produces no scores, rankings, or gradients.
+
+NON-AUTHORIZATION CLARIFICATION
+-------------------------------
+
+SLML does not authorize or permit action, license or certify systems,
+validate or endorse claims, approve or sanction behavior, confer
+legitimacy, legality, or compliance, or substitute for governance, law,
+or oversight. No SLML output constitutes permission, approval, or
+authority of any kind.
+
+LIMITATIONS
+-----------
+
+SLML makes no claim about ethical sufficiency, legal compliance, social
+desirability, fairness outcomes, or policy alignment. Institutions remain
+responsible for interpretation, governance, and decision-making.
+
+END OF BRIEF
+------------

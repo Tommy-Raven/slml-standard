@@ -1,1 +1,0 @@
-this staging directory is meant for approved and validated codebase to stage for release 

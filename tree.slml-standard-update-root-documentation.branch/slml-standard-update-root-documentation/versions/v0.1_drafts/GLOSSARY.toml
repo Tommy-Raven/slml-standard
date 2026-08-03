@@ -1,8 +1,0 @@
-[terms]
-admissible = "Manifest passes validation under the declared standard"
-corrupted = "Manifest violates one or more required invariants"
-manifest = "Machine-ingestible structured claim about a system"
-traceability = "Ability to reproduce validation against exact versioned artifacts"
-inconvenience = "Declared burden imposed by a system"
-obligation = "Requirement enforced by one entity upon another"
-closed_workflow = "Workflow that does not externalize or retain user inputs for third-party benefit"
